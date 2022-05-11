@@ -62,7 +62,7 @@ export const NavBar = ({ token, setToken }) => {
                 token
                   ?
                   <button className="button is-outlined" onClick={() => {
-                    setToken('')
+                    localStorage.removeItem('token')
                     history.push('/login')
                   }}>Logout</button>
                   :
