@@ -11,12 +11,15 @@ export const AllCategories = () => {
 // use UseState to set the state for the categories array for
 // when the state changes.
     const [categories, setCategories] = useState([])
+    const [refreshState, setRefreshState] = useState(false)
+    
 
     // use UseEffect to getAllCategories and set the state of the category array.
     useEffect(() => {
         getCategories()
+        setRefreshState(false)
     },
-    [])
+    [refreshState])
     
     const getCategories = () => {
         getAllCategories()
@@ -31,14 +34,14 @@ export const AllCategories = () => {
 // edit and delete buttons  
     return <>
         <div>AllCategories Page</div>
-        <div className="CreateNewCategoryFormContainer">
-            <NewCategoryForm getCategories={getCategories} />
-        </div>
         {categories.map((category) => {
             return <div key={`category--${category.id}`}>{category.label}
                 <button>edit</button> <button>delete</button>
             </div>
         })}
+        <div className="CreateNewCategoryFormContainer">
+            <NewCategoryForm setRefreshState={setRefreshState} />
+        </div>
 
 
     </>
