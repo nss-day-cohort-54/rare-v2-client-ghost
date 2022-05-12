@@ -19,15 +19,16 @@ export const CommentForm = ({ postId, getComments }) => {
 
             const copy = {}
             copy.content = newComment
+            copy.subject = subject
             // gets comment content from state
             // adds postId
             copy.post_id = postId
             
-            copy.authorId = parseInt(localStorage.getItem("token"))
             // adds current user id
             // sends to database using function from CommentManager
             addComment(copy)
             .then(() => setComment(""))
+            .then(() => setSubject(""))
             .then(() => getComments(postId))
             // refresh comment list
         } else {
@@ -43,7 +44,7 @@ export const CommentForm = ({ postId, getComments }) => {
         <input id="subject" name="subject"
                     onChange={(e) => setSubject(e.target.value)}
                     value={subject}/>
-        
+        <label htmlFor="content">Comment:</label>
         <textarea id="content" name="content"
                     onChange={(e) => setComment(e.target.value)}
                     value={newComment}>

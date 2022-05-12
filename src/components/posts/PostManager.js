@@ -14,7 +14,12 @@ export const getAllPosts = () => {
 // export function that fetches single post, needs param to take id as arg, then parse from json to js
 
 export const getSinglePost = (id) => {
-  return fetchIt(`${Settings.API}/posts/${id}`)
+  return fetch(`${Settings.API}/posts/${id}`, {
+    headers:{
+        "Authorization": `Token ${localStorage.getItem("token")}`
+    }
+})
+  .then(res => res.json())
 };
 // export function that adds post
 

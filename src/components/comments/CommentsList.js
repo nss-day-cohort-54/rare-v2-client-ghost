@@ -5,6 +5,7 @@
 // Component for comment form
 
 import { useState, useEffect } from "react"
+import { getCurrentUser } from "../users/UserManager"
 import { Comment } from "./Comment"
 import { CommentForm } from "./CommentForm"
 import { getCommentsByPostId } from "./CommentManager"
@@ -68,7 +69,6 @@ export const CommentList = ({ postId }) => {
     */}
     {
         comments.map(comment => {
-            debugger
             let currentAuthor = comment.author_id === userId
             return <div key={`comment--${comment.id}`}>
                     <Comment postId={postId} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} />
