@@ -71,7 +71,7 @@ export const Post = ({ listView, cardView, post }) => {
                                     }
                                 </div>
                                 <div>{post.title}</div>
-                                <div>{post.category.label}</div>
+                                <div>{post.category?.label}</div>
                             </div>
                             <div><img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} /></div>
                             <div className="postDetailsBelowCard">
@@ -92,7 +92,7 @@ export const Post = ({ listView, cardView, post }) => {
                                     : <div>{post.content}</div>
                             }
                         </div>
-                        <div className="postDetailsTags">{post.tags.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
+                        <div className="postDetailsTags">{post.tags?.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
                     </div>
         }
         {/* Content needed in card view */}

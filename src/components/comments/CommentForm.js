@@ -20,7 +20,7 @@ export const CommentForm = ({ postId, getComments }) => {
             copy.content = newComment
             // gets comment content from state
             // adds postId
-            copy.postId = postId
+            copy.post_id = postId
             copy.authorId = parseInt(localStorage.getItem("token"))
             // adds current user id
             // sends to database using function from CommentManager

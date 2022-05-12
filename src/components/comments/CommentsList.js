@@ -18,8 +18,9 @@ export const CommentList = ({ postId }) => {
     // declare state variable for comments array
     // const [comments, setComments] = useState([])
     const [comments, setComments] = useState([])
+    const [user, setUser] = useState({})
+    const userId = user.id
     // useEffect that pulls comments by postId
-
     useEffect(
         () => {
             if(postId) {
@@ -27,6 +28,13 @@ export const CommentList = ({ postId }) => {
             }
         },
         [postId]
+    )
+    useEffect(
+        () => {
+            getCurrentUser()
+            .then(data => setUser(data))
+        },
+        []
     )
     /* 
         invoke function
@@ -60,7 +68,8 @@ export const CommentList = ({ postId }) => {
     */}
     {
         comments.map(comment => {
-            let currentAuthor = comment.user.id === parseInt(localStorage.getItem("token"))
+            debugger
+            let currentAuthor = comment.author_id === userId
             return <div key={`comment--${comment.id}`}>
                     <Comment postId={postId} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} />
                 </div>

@@ -10,6 +10,7 @@ export const SinglePost = () => {
 
     useEffect(
         () => {
+            debugger
             if(postId) {
                 getSinglePost(postId)
                     .then(setPost)
