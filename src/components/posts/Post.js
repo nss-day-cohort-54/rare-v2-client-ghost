@@ -56,10 +56,10 @@ export const Post = ({ listView, cardView, post }) => {
                                     : null
                             }
                         </div>
-                        <div>{post.user.firstName} {post.user.lastName}</div>
-                        <div>{post.publicationDate}</div>
+                        <div>{post.author?.user.first_name} {post.author?.user.last_name}</div>
+                        <div>{post.publication_date}</div>
                         <div>{post.category.label}</div>
-                        <div>{post.tags.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
+                        {/* <div>{post.tags.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div> */}
                     </div>
                     : <div key={`post--${post.id}`} className="postDetails">
                         <div className="postDetailsMain">
