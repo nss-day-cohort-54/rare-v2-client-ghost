@@ -24,13 +24,13 @@ export const Post = ({ listView, cardView, post }) => {
                                 {post.title}
                             </Link>
                         </div>
-                        <div>{post.publicationDate}</div>
+                        <div>{post.publication_date}</div>
                     </div>
                     <div className="cardImage">
                         <img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} />
                     </div>
                     <div className="cardBottom">
-                        <div>Author: {post.user.firstName} {post.user.lastName}</div>
+                        <div>Author: {post.author?.user.first_name} {post.author?.user.last_name}</div>
                         <div className="cardFunctions">
                             <div>Reaction Count: 0</div>
                             {
@@ -42,6 +42,7 @@ export const Post = ({ listView, cardView, post }) => {
                             }
                         </div>
                     </div>
+                    <div>Category: {post.category.label}</div>
                 </div>
                 : listView
                     ? <div key={`post--${post.id}`} className="singlePost">

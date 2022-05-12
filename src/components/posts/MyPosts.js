@@ -1,18 +1,25 @@
 import { useState, useEffect } from "react"
+import { getCurrentUser } from "../users/UserManager"
 import { Post } from "./Post"
 import { getUserPosts } from "./PostManager"
 
-export const MyPosts = () => {
-    const currentUser = localStorage.getItem("token")
+export const MyPosts = ( { refreshState, setRefreshState }) => {
     const [posts, setPosts] = useState([])
+    const [currentUser, setUser] = useState()
 
-    useEffect(
-        () => {
-            getUserPosts(currentUser)
-                .then(setPosts)
-        },
-        []
-    )
+
+    useEffect(() => {
+        getCurrentUser()
+        .then((data) => setUser(data.id))
+    }, [refreshState])
+
+
+    useEffect(() => {
+        getUserPosts(currentUser)
+            .then((data) => setPosts(data))
+            .then(() => setRefreshState(false))
+    }, [currentUser, refreshState])
+
 
     return <>
         {

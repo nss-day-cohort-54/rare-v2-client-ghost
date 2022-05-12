@@ -42,7 +42,7 @@ export const ApplicationViews = () => {
         <SinglePost />
       </Route>
       <Route exact path="/posts/myPosts">
-        <MyPosts />
+        <MyPosts refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/posts/user/:userId(\d+)">
         <PostsByUser />
