@@ -15,6 +15,20 @@ export const getAllUsers = () => {
 // get single user by user id
 // returns user object with posts array embedded
 // user object should have all properties except password
+export const getCurrentUser = () => {
+    return fetch(`${Settings.API}/users`, {
+        headers:{
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }
+    })
+    .then(res => res.json())
+}
+
 export const getSingleUser = (id) => {
-    return fetchIt(`${Settings.API}/users/${id}`)
+    return fetch(`${Settings.API}/users/${id}`, {
+        headers:{
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }
+    })
+    .then(res => res.json())
 }

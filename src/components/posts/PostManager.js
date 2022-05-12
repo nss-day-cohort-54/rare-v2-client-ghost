@@ -3,7 +3,11 @@ import { Settings } from "../utils/Settings"
 
 
 export const getAllPosts = () => {
-  return fetch(`${Settings.API}/posts`)
+  return fetch(`${Settings.API}/posts`, {
+    headers:{
+        "Authorization": `Token ${localStorage.getItem("token")}`
+    }
+})
     .then((res) => res.json())
 }
 
@@ -37,9 +41,16 @@ export const deletePost = (id) => {
 // body is stringified json with entry passed as arg
 
 // get posts by user id
-export const getUserPosts = (id) => {
-  return fetchIt(`${Settings.API}/posts?user_id=${id}`)
+export const getUserPosts = (userId) => {
+  return fetch(`${Settings.API}/posts?user_id=${userId}`, {
+    headers:{
+        "Authorization": `Token ${localStorage.getItem("token")}`
+    }
+})
+  .then(res => res.json())
 };
+
+
 
 export const getPostsByTag = (id) => {
   return fetchIt(`${Settings.API}/posts?tag_id=${id}`)
