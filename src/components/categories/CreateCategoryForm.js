@@ -1,57 +1,15 @@
 // imports
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { fetchIt } from "../utils/Fetch"
-import { Settings } from "../utils/Settings"
+import { submitNewCategory } from "./CategoryManager";
+
 
 // def a function that will return a new category form
 
-export const NewCategoryForm = ({ getCategories }) => {
-
+export const NewCategoryForm = ({setRefreshState}) => {
+    const [newCategoryForm, setNewCategoryForm] = useState(false)
     const [form, updateForm] = useState({label: ""})
-    const history = useHistory()
 
-// const [form, updateForm] = useState()
-
-
-// create a submitNewCategory button which will submit a new category to the server
-  // accepts one parameter, "e"
-    // e.preventDefault()
-        // defines a new  variable which will be an object for the new category, "newCategory"
-        // the object will have one key value pair:
-            // label: form.category 
-                // define a new variable, fetchOption, method will be POST, headers will be "Content-Type": "application/json"
-                // convert what we're sending to the server into json body: JSON.stringify(newCategory)
-        
-                const submitNewCategory = (e) => {
-                    e.preventDefault()
-                    const newCategory = {
-                        label: form.label,
-                    }
-                    return fetchIt(`${Settings.API}/categories`, "POST", JSON.stringify(newCategory))
-                            .then(getCategories)
-                }
-
-        // post the newCategory to the Categories table in the db
-        // return fetch("http://localhost:8088/categories", fetchOption) 
-        
-        // example:
-        
-        // const submitCategory = (e) => {
-        //     e.preventDefault()
-        //     const newCategory = {
-        //         label: form.label,
-        //     }
-        //     const fetchOption = {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //         },
-        //         body: JSON.stringify(newCategory)
-        //     }
-        
-        //     return fetch("http://localhost:8088/categories", fetchOption)
-        // }
 
 
 
@@ -73,6 +31,7 @@ export const NewCategoryForm = ({ getCategories }) => {
                         // example:
                         return (
                             <>
+                            {newCategoryForm === false ? <button onClick={() => setNewCategoryForm(true)}>Add new category?</button> : 
                                 <fieldset>
                                     <div className="form-group">
                                         <label htmlFor="category">Create a new category</label>
@@ -89,18 +48,23 @@ export const NewCategoryForm = ({ getCategories }) => {
                                                     updateForm(copy)
                                                 }
                                             }
-                                        />
+                                            />
                                         <div className="submitButtonCreateNewCategoryForm">
                     
-                                            <button onClick={(e) => {
-                                                submitNewCategory(e)
+                                            <button onClick={() => {
+                                                const newCategory = {
+                                                    label: form.label
+                                                }
+                                                submitNewCategory(newCategory)
                                                 updateForm({label: ""})
+                                                setRefreshState(true)
                                             }} className="submit-button">
                                                 Submit
                                             </button>
                                         </div>
                                     </div>
                                 </fieldset>
+                                            }
                             </>
                         )
                                         }
