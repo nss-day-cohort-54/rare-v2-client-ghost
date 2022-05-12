@@ -9,7 +9,12 @@ import { Settings } from "../utils/Settings"
 // username
 // email
 export const getAllUsers = () => {
-    return fetchIt(`${Settings.API}/users`)
+    return fetch(`${Settings.API}/users`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }
+    })  
+.then(res => res.json())
 }
 
 // get single user by user id
@@ -17,18 +22,18 @@ export const getAllUsers = () => {
 // user object should have all properties except password
 export const getCurrentUser = () => {
     return fetch(`${Settings.API}/users`, {
-        headers:{
+        headers: {
             "Authorization": `Token ${localStorage.getItem("token")}`
         }
     })
-    .then(res => res.json())
+        .then(res => res.json())
 }
 
 export const getSingleUser = (id) => {
     return fetch(`${Settings.API}/users/${id}`, {
-        headers:{
+        headers: {
             "Authorization": `Token ${localStorage.getItem("token")}`
         }
     })
-    .then(res => res.json())
+        .then(res => res.json())
 }

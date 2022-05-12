@@ -119,7 +119,7 @@ export const AllPosts = () => {
         </fieldset>
         
         
-        {/* filter by user jsx */}
+        {/* filter by user jsx
         <fieldset id="authorDropdown">
             <select
                 className="authorDropdown"
@@ -146,7 +146,7 @@ export const AllPosts = () => {
                     );
                 })}
             </select>
-        </fieldset>
+        </fieldset> */}
         {/* filter by tag jsx */}
         <fieldset>
             <select

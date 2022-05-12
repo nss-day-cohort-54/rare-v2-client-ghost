@@ -8,29 +8,24 @@ export const CommentForm = ({ postId, getComments }) => {
     // declare state variable for comment to add
     const [newComment, setComment] = useState("")
     const [subject, setSubject] = useState("")
-        // should have values
-        // post id
-        // author of comment id (current user)
-        // content
     
     // function to handle comment submission
     const submitComment = () => {
         if(newComment.length > 0) {
 
             const copy = {}
+            // gets comment content from state
             copy.content = newComment
             copy.subject = subject
-            // gets comment content from state
             // adds postId
             copy.post_id = postId
             
-            // adds current user id
-            // sends to database using function from CommentManager
+            // sends to database 
             addComment(copy)
             .then(() => setComment(""))
             .then(() => setSubject(""))
-            .then(() => getComments(postId))
             // refresh comment list
+            .then(() => getComments(postId))
         } else {
             window.alert("Please fill out your comment before submitting.")
         }
