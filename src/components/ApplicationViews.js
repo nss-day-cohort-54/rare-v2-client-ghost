@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import { Route } from "react-router-dom"
 import { Home } from "./home/Home.js"
 import { AllPosts } from "./posts/AllPosts.js"
@@ -13,6 +13,8 @@ import { PostsByUser } from "./posts/PostsByUser.js"
 import { SinglePost } from "./posts/SinglePost.js"
 
 export const ApplicationViews = () => {
+      //state to refresh state when new object is submitted
+      const [refreshState, setRefreshState] = useState(false)
   return (
     <>
       <Route exact path="/">
@@ -28,7 +30,7 @@ export const ApplicationViews = () => {
         <User listView={false} />
       </Route>
       <Route path="/tags">
-        <AllTags />
+        <AllTags refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/newPost">
         <CreatePosts editing={false} />
@@ -50,7 +52,7 @@ export const ApplicationViews = () => {
         <CreatePost />
       </Route> */}
       <Route exact path="/categories">
-        <AllCategories />
+        <AllCategories refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
     </>
   )

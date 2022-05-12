@@ -1,32 +1,30 @@
 import { getAllTags } from "./TagManager"
 import React, { useEffect, useState } from "react";
 import { NewTagForm } from "./CreateTagForm";
-export const AllTags = () => {
+
+
+
+export const AllTags = ({refreshState, setRefreshState}) => {
 
     const [tags, setTags] = useState([])
 
-    const getTags = () => {
-        return getAllTags()
-                .then((tags => {
-                    setTags(tags)
-                }))
-    }
-
+    // use UseEffect to getAllTags and set the state of the tag array.
     useEffect(() => {
-        getTags()
+        getAllTags()
+        .then(data => setTags(data))
+        .then(setRefreshState(false))
     },
-        [])
+    [refreshState])
+
     return <>
-        <div>AllTags Page</div>
-        <div className="CreateNewTagFormContainer">
-            <NewTagForm getTags={getTags} />
-        </div>
+        <div>All Tags</div>
         {tags.map((tag) => {
             return <div key={`tag--${tag.id}`}>{tag.label} 
             <button>edit</button> <button>delete</button>
             </div>
         })}
-
-
+        <div className="CreateNewTagFormContainer">
+            <NewTagForm setRefreshState={setRefreshState} />
+        </div>
     </>
 }
