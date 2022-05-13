@@ -7,27 +7,25 @@ import { addComment } from "./CommentManager"
 export const CommentForm = ({ postId, getComments }) => {
     // declare state variable for comment to add
     const [newComment, setComment] = useState("")
-        // should have values
-        // post id
-        // author of comment id (current user)
-        // content
+    const [subject, setSubject] = useState("")
     
     // function to handle comment submission
     const submitComment = () => {
         if(newComment.length > 0) {
 
             const copy = {}
-            copy.content = newComment
             // gets comment content from state
+            copy.content = newComment
+            copy.subject = subject
             // adds postId
-            copy.postId = postId
-            copy.authorId = parseInt(localStorage.getItem("token"))
-            // adds current user id
-            // sends to database using function from CommentManager
+            copy.post_id = postId
+            
+            // sends to database 
             addComment(copy)
             .then(() => setComment(""))
-            .then(() => getComments(postId))
+            .then(() => setSubject(""))
             // refresh comment list
+            .then(() => getComments(postId))
         } else {
             window.alert("Please fill out your comment before submitting.")
         }
@@ -37,7 +35,11 @@ export const CommentForm = ({ postId, getComments }) => {
             textarea form input
             button to submit comment
         */}
-        <label htmlFor="content">Add a Comment:</label>
+        <label htmlFor="subject">Subject:</label>
+        <input id="subject" name="subject"
+                    onChange={(e) => setSubject(e.target.value)}
+                    value={subject}/>
+        <label htmlFor="content">Comment:</label>
         <textarea id="content" name="content"
                     onChange={(e) => setComment(e.target.value)}
                     value={newComment}>

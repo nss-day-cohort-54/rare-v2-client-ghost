@@ -3,14 +3,22 @@ import { useHistory } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { ButtonControls } from "../buttonControls/ButtonControls"
 import { CommentList } from "../comments/CommentsList"
+import { getCurrentUser } from "../users/UserManager"
 import "./Post.css"
 // function that renders a single post
 export const Post = ({ listView, cardView, post }) => {
 
     const [showComments, setShowComments] = useState(false)
     const history = useHistory()
-    const currentUser = parseInt(localStorage.getItem("token"))
+    const [currentUser, setUser] = useState({})
 
+    useEffect(
+        () => {
+            getCurrentUser()
+            .then((data) => setUser(data))
+        },
+        []
+    )
 
     return <>
         {/* Content needed in all posts list */}
@@ -34,7 +42,7 @@ export const Post = ({ listView, cardView, post }) => {
                         <div className="cardFunctions">
                             <div>Reaction Count: 0</div>
                             {
-                                post.userId === currentUser
+                                post.userId === currentUser.id
                                     ? <div className="cardButtons">
                                         <ButtonControls isPost={true} postId={post.id} />
                                     </div>
@@ -51,7 +59,7 @@ export const Post = ({ listView, cardView, post }) => {
                                 {post.title}
                             </Link>
                             {
-                                post.userId === currentUser
+                                post.userId === currentUser.id
                                     ? <ButtonControls isPost={true} postId={post.id} />
                                     : null
                             }
@@ -66,18 +74,18 @@ export const Post = ({ listView, cardView, post }) => {
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
                                     {
-                                        post.userId === currentUser
+                                        post.userId === currentUser.id
                                             ? <ButtonControls isPost={true} postId={post.id} />
                                             : null
                                     }
                                 </div>
                                 <div>{post.title}</div>
-                                <div>{post.category.label}</div>
+                                <div>{post.category?.label}</div>
                             </div>
                             <div><img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} /></div>
                             <div className="postDetailsBelowCard">
                                 <div>By <Link to={`/users/${post.userId}`} >
-                                    {post.user.username}
+                                    {post.user?.username}
                                 </Link>
                                 </div>
                                 {
@@ -93,7 +101,7 @@ export const Post = ({ listView, cardView, post }) => {
                                     : <div>{post.content}</div>
                             }
                         </div>
-                        <div className="postDetailsTags">{post.tags.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
+                        <div className="postDetailsTags">{post.tags?.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
                     </div>
         }
         {/* Content needed in card view */}
