@@ -15,10 +15,15 @@ export const Post = ({ listView, cardView, post }) => {
     useEffect(
         () => {
             getCurrentUser()
-            .then((data) => setUser(data))
+                .then((data) => setUser(data))
         },
         []
     )
+
+    const formatDate = (postDate) => {
+        let date = new Date(postDate)
+        return ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + ((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + date.getFullYear()
+    }
 
     return <>
         {/* Content needed in all posts list */}
@@ -69,7 +74,8 @@ export const Post = ({ listView, cardView, post }) => {
                         <div>{post.category.label}</div>
                         {/* <div>{post.tags.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div> */}
                     </div>
-                    : <div key={`post--${post.id}`} className="postDetails">
+                    : //Detailed post single view 
+                    <div key={`post--${post.id}`} className="postDetails">
                         <div className="postDetailsMain">
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
@@ -80,25 +86,28 @@ export const Post = ({ listView, cardView, post }) => {
                                     }
                                 </div>
                                 <div>{post.title}</div>
-                                <div>{post.category?.label}</div>
                             </div>
                             <div><img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} /></div>
                             <div className="postDetailsBelowCard">
-                                <div>By <Link to={`/users/${post.userId}`} >
-                                    {post.user?.username}
-                                </Link>
+                                <div>By
+                                    <Link to={`/users/${post.userId}`} >
+                                        {post.author.user.username}
+                                    </Link>
+                                    <div>
+                                        {formatDate(post.publication_date)}
+                                    </div>
+
                                 </div>
-                                {
-                                    showComments
-                                        ? <button onClick={() => { setShowComments(false) }}>Show Post</button>
-                                        : <button onClick={() => setShowComments(true)}>View Comments</button>
-                                }
-                                <div>Reactions</div>
                             </div>
                             {
                                 showComments
                                     ? <CommentList postId={post.id} />
                                     : <div>{post.content}</div>
+                            }
+                            {
+                                showComments
+                                    ? <button onClick={() => { setShowComments(false) }}>Show Post</button>
+                                    : <button onClick={() => setShowComments(true)}>View Comments</button>
                             }
                         </div>
                         <div className="postDetailsTags">{post.tags?.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
