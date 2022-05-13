@@ -40,7 +40,7 @@ export const Post = ({ listView, cardView, post }) => {
                         <div>{post.publication_date}</div>
                     </div>
                     <div className="cardImage">
-                        <img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} />
+                        <img src={`${post.image_url || "https://picsum.photos/300/100"}`} />
                     </div>
                     <div className="cardBottom">
                         <div>Author: {post.author?.user.first_name} {post.author?.user.last_name}</div>
