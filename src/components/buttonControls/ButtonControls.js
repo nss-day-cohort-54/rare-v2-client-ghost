@@ -8,6 +8,7 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
 
   return <div>
     <dialog id={`anything-${isPost}`}>
+      
       {
         isPost
         ? <div>Are you sure you want to delete this post?</div>
@@ -20,6 +21,7 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
             (e) => {
               e.preventDefault()
               if (isPost) {
+                debugger
                 deletePost(postId)
                   .then(
                     () => {

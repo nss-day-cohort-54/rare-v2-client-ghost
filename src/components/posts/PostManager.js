@@ -36,7 +36,11 @@ export const getSinglePost = (id) => {
 // return a fetch with /${postId},
 // method: DELETE
 export const deletePost = (id) => {
-  return fetchIt(`${Settings.API}/posts/${id}`, "DELETE")
+  return fetch(`${Settings.API}/posts/${id}`, {
+    headers:{
+        "Authorization": `Token ${localStorage.getItem("token")}`
+    }
+}, "DELETE")
 }
 
 // export a function that edits a post "post => {"
