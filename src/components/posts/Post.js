@@ -11,7 +11,7 @@ export const Post = ({ listView, cardView, post }) => {
     const [showComments, setShowComments] = useState(false)
     const history = useHistory()
     const [currentUser, setUser] = useState({})
-
+    const userId = currentUser.id
     useEffect(
         () => {
             getCurrentUser()
@@ -47,7 +47,7 @@ export const Post = ({ listView, cardView, post }) => {
                         <div className="cardFunctions">
                             <div>Reaction Count: 0</div>
                             {
-                                post.userId === currentUser.id
+                                post.author.id === userId
                                     ? <div className="cardButtons">
                                         <ButtonControls isPost={true} postId={post.id} />
                                     </div>
@@ -64,7 +64,7 @@ export const Post = ({ listView, cardView, post }) => {
                                 {post.title}
                             </Link>
                             {
-                                post.userId === currentUser.id
+                                post.author.id === userId
                                     ? <ButtonControls isPost={true} postId={post.id} />
                                     : null
                             }
@@ -80,7 +80,7 @@ export const Post = ({ listView, cardView, post }) => {
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
                                     {
-                                        post.userId === currentUser.id
+                                        post.author.id === userId
                                             ? <ButtonControls isPost={true} postId={post.id} />
                                             : null
                                     }
@@ -90,7 +90,7 @@ export const Post = ({ listView, cardView, post }) => {
                             <div><img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} /></div>
                             <div className="postDetailsBelowCard">
                                 <div>By
-                                    <Link to={`/users/${post.userId}`} >
+                                    <Link to={`/users/${post.author.id}`} >
                                         {post.author.user.username}
                                     </Link>
                                     <div>

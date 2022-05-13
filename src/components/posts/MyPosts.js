@@ -5,17 +5,17 @@ import { getUserPosts } from "./PostManager"
 
 export const MyPosts = ( { refreshState, setRefreshState }) => {
     const [posts, setPosts] = useState([])
-    const [currentUser, setUser] = useState()
-
+    const [currentUser, setUser] = useState({})
+    const userId = currentUser.id
 
     useEffect(() => {
         getCurrentUser()
-        .then((data) => setUser(data.id))
+        .then((data) => setUser(data))
     }, [refreshState])
 
 
     useEffect(() => {
-        getUserPosts(currentUser)
+        getUserPosts(userId)
             .then((data) => setPosts(data))
             .then(() => setRefreshState(false))
     }, [currentUser, refreshState])
