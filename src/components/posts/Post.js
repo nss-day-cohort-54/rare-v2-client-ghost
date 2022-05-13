@@ -80,7 +80,7 @@ export const Post = ({ listView, cardView, post }) => {
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
                                     {
-                                        post.userId === currentUser.id
+                                        post.author.id === currentUser.id
                                             ? <ButtonControls isPost={true} postId={post.id} />
                                             : null
                                     }
@@ -102,7 +102,20 @@ export const Post = ({ listView, cardView, post }) => {
                             {
                                 showComments
                                     ? <CommentList postId={post.id} />
-                                    : <div>{post.content}</div>
+                                    : 
+                                    <>
+                                    <div>{post.content}</div>
+                                    {/* If post has tags */}
+                                    {post.tag.length > 0 ? 
+                                    <div>
+                                    Tags: 
+                                    {post.tag.map(tag => {
+                                        return <div key={`tag--${tag.id}`}>{tag.label}</div>
+                                    })}
+                                    </div>
+                                    // if post has no tags
+                                    :""}
+                                    </>
                             }
                             {
                                 showComments
