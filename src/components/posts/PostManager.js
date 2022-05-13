@@ -4,22 +4,22 @@ import { Settings } from "../utils/Settings"
 
 export const getAllPosts = () => {
   return fetch(`${Settings.API}/posts`, {
-    headers:{
-        "Authorization": `Token ${localStorage.getItem("token")}`
+    headers: {
+      "Authorization": `Token ${localStorage.getItem("token")}`
     }
-})
+  })
     .then((res) => res.json())
 }
 
 // export function that fetches single post, needs param to take id as arg, then parse from json to js
 
-export const getSinglePost = (id) => {
-  return fetch(`${Settings.API}/posts/${id}`, {
-    headers:{
-        "Authorization": `Token ${localStorage.getItem("token")}`
+export const getSinglePost = (postId) => {
+  return fetch(`${Settings.API}/posts/${postId}`, {
+    headers: {
+      "Authorization": `Token ${localStorage.getItem("token")}`
     }
-})
-  .then(res => res.json())
+  })
+    .then(res => res.json())
 };
 // export function that adds post
 
@@ -45,14 +45,26 @@ export const deletePost = (id) => {
 // normal headers
 // body is stringified json with entry passed as arg
 
+export const updatePost = post => {
+  return fetch(`${Settings.API}/posts/${post.id}`, {
+      method: "PUT",
+      header: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify(post)
+  })
+  .then(getAllPosts)
+}
+
 // get posts by user id
 export const getUserPosts = (userId) => {
   return fetch(`${Settings.API}/posts?user_id=${userId}`, {
-    headers:{
-        "Authorization": `Token ${localStorage.getItem("token")}`
+    headers: {
+      "Authorization": `Token ${localStorage.getItem("token")}`
     }
-})
-  .then(res => res.json())
+  })
+    .then(res => res.json())
 };
 
 
@@ -67,16 +79,16 @@ export const getPostsByTag = (id) => {
 // }
 
 // create post
-// export const createPost = (body) => {
-//   return fetch(`http://localhost:8088/posts`, {
-
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(body),
-//   }).then((response) => response.json());
-// };
+export const createPost = (post) => {
+  return fetch(`${Settings.API}/posts`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Token ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(post)
+  }).then(getAllPosts)
+};
 
 export const searchPostTitles = titleString => {
   return fetch(`http://localhost:8088/posts?title=${titleString}`)

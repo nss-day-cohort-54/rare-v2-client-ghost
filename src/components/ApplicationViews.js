@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, { useState, useEffect } from "react"
 import { Route } from "react-router-dom"
 import { Home } from "./home/Home.js"
 import { AllPosts } from "./posts/AllPosts.js"
@@ -11,10 +11,22 @@ import { CreatePosts } from "./posts/CreatePosts.js"
 import { MyPosts } from "./posts/MyPosts.js"
 import { PostsByUser } from "./posts/PostsByUser.js"
 import { SinglePost } from "./posts/SinglePost.js"
+import { getCurrentUser } from "./users/UserManager";
 
 export const ApplicationViews = () => {
-      //state to refresh state when new object is submitted
-      const [refreshState, setRefreshState] = useState(false)
+  //state to refresh state when new object is submitted
+  const [refreshState, setRefreshState] = useState(false)
+  const [currentUser, setUser] = useState()
+
+  useEffect(
+    () => {
+      getCurrentUser()
+        .then(data => setUser(data))
+    },
+    []
+  )
+
+
   return (
     <>
       <Route exact path="/">
@@ -33,10 +45,10 @@ export const ApplicationViews = () => {
         <AllTags refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/newPost">
-        <CreatePosts editing={false} />
+        <CreatePosts currentUser={currentUser} editing={false} />
       </Route>
       <Route exact path="/editPost/:postId(\d+)">
-        <CreatePosts editing={true} />
+        <CreatePosts currentUser={currentUser} editing={true} />
       </Route>
       <Route exact path="/posts/single/:postId(\d+)">
         <SinglePost />
