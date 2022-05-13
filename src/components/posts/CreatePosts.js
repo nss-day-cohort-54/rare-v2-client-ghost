@@ -7,7 +7,7 @@ import { createPost, getSinglePost, updatePost } from "./PostManager";
 
 
 
-export const CreatePosts = () => {
+export const CreatePosts = ( { currentUser }) => {
 
     const [posts, setPosts] = useState([])
     const [categories, setCategories] = useState([])
@@ -55,7 +55,7 @@ export const CreatePosts = () => {
                 image_url: post.image_url,
                 content: post.content,
                 approved: post.approved,
-                user: parseInt(localStorage.getItem("token"))
+                user: currentUser.id
             })
                 .then(() => history.push("/posts"))
 
@@ -67,10 +67,10 @@ export const CreatePosts = () => {
                 image_url: post.image_url,
                 content: post.content,
                 approved: false,
-                user: parseInt(localStorage.getItem("token"))
+                user: currentUser.id
 
             })
-                .then(() => history.push("/myposts"))
+                .then(() => history.push("/posts/myposts"))
         }
 
     }
@@ -111,12 +111,12 @@ export const CreatePosts = () => {
             <fieldset>
                 <div className="form_group">
                     <label htmlFor="category"> Category: </label>
-                    <select name="category" require autoFocus className="form-control" id="category" placeholder="pick"
+                    <select name="category" required autoFocus className="form-control" id="category" placeholder="pick"
                         value={categories.id}
                         onChange={handleInputChange}>
                         {categories.map((c) => {
                             return (
-                                <option id="category" name="category" require autoFocus onChange={handleInputChange} key={c.id} value={c.id}>
+                                <option id="category" name="category" required autoFocus onChange={handleInputChange} key={c.id} value={c.id}>
                                     {c.label}
                                 </option>
                             )
