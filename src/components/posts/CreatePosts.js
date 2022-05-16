@@ -1,6 +1,7 @@
 // imports React, useEffect, useSate, useHistory, sendPost, fetchTags
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { getAllCategories } from "../categories/CategoryManager";
 import { createPost, getSinglePost, updatePost } from "./PostManager";
@@ -11,6 +12,7 @@ export const CreatePosts = ( { currentUser }) => {
 
     const [posts, setPosts] = useState([])
     const [categories, setCategories] = useState([])
+    const [originalPost, setOriginalPost] = useState({})
     const { postId } = useParams()
     const history = useHistory()
     const editMode = postId ? true : false
@@ -25,13 +27,28 @@ export const CreatePosts = ( { currentUser }) => {
     })
 
     useEffect(() => {
+        if (editMode) {
+            const copy = {}
+            copy.id = originalPost.id
+            copy.category = originalPost.category?.id
+            copy.title = originalPost.title
+            copy.publication_date = originalPost.publication_date
+            copy.image_url = originalPost.image_url
+            copy.content = originalPost.content
+            copy.approved = originalPost.approved
+            setPost(copy)
+        }
+
+    }, [originalPost])
+
+    useEffect(() => {
         getAllCategories()
         .then((categories) => {
             setCategories(categories)
             if (postId) {
                 getSinglePost(parseInt(postId))
                     .then(post => {
-                        setPost(post)
+                        setOriginalPost(post)
                     })
             }
         })
@@ -57,7 +74,7 @@ export const CreatePosts = ( { currentUser }) => {
                 approved: post.approved,
                 user: currentUser.id
             })
-                .then(() => history.push("/posts"))
+                .then(() => history.push("/posts/all"))
 
         } else {
             createPost({
@@ -112,7 +129,7 @@ export const CreatePosts = ( { currentUser }) => {
                 <div className="form_group">
                     <label htmlFor="category"> Category: </label>
                     <select name="category" required autoFocus className="form-control" id="category" placeholder="pick"
-                        value={categories.id}
+                        value={post.category}
                         onChange={handleInputChange}>
                         {categories.map((c) => {
                             return (
@@ -132,6 +149,7 @@ export const CreatePosts = ( { currentUser }) => {
                 className="bt btn-primary">
                 {editMode ? "Save Changes" : "Create Post"}
             </button>
+            <Link to="/posts/all" className="cancel-btn">Cancel</Link>
         </form>
     )
 }
