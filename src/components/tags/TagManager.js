@@ -29,3 +29,22 @@ export const deleteTag = (tagId) => {
       }
   })
 }
+
+export const removeTag = (tag, postId) => {
+  return fetch(`${Settings.API}/posts/${postId}/tag`, {
+    method: "DELETE",
+    headers:{
+      "Content-Type": "application/json",
+      "Authorization": `Token ${localStorage.getItem("token")}`
+  }, body: JSON.stringify(tag)
+  })
+}
+export const addTag = (tag, postId) => {
+  return fetch(`${Settings.API}/posts/${postId}/tag`, {
+    method: "POST",
+    headers:{
+      "Content-Type": "application/json",
+      "Authorization": `Token ${localStorage.getItem("token")}`
+  }, body: JSON.stringify(tag)
+  })
+}

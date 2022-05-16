@@ -50,12 +50,12 @@ export const deletePost = (id) => {
 // normal headers
 // body is stringified json with entry passed as arg
 
-export const updatePost = post => {
+export const updatePost = (post) => {
   return fetch(`${Settings.API}/posts/${post.id}`, {
       method: "PUT",
-      header: {
+      headers: {
           "Content-Type": "application/json",
-          Authorization: `Token ${localStorage.getItem("token")}`
+          "Authorization": `Token ${localStorage.getItem("token")}`
       },
       body: JSON.stringify(post)
   })

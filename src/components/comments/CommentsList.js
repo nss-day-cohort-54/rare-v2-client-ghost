@@ -15,7 +15,7 @@ import { getCommentsByPostId } from "./CommentManager"
 
 // From Individual Post Component
 // <CommentList postId={id} /> - displayed on a boolean
-export const CommentList = ({ postId }) => {
+export const CommentList = ({ postId, currentUser }) => {
     // declare state variable for comments array
     // const [comments, setComments] = useState([])
     const [comments, setComments] = useState([])
