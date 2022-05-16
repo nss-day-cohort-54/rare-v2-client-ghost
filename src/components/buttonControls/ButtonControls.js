@@ -81,7 +81,6 @@ export const ButtonControls = ({ isPost=undefined, id=undefined, commentId=undef
       <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
     </button>
     <button onClick={() => {
-      debugger
       const buttonTarget = document.querySelector(`#anything-${id}`)
       buttonTarget.showModal()
     }}>

@@ -25,7 +25,7 @@ export const AllTags = ({refreshState, setRefreshState}) => {
         <div>All Tags</div>
         {tags.map((tag) => {
             
-            return <div id={`tag--${tag.id}`}>{tag.label} 
+            return <div key={`tag--${tag.id}`}>{tag.label} 
                     {
                         currentUser.is_staff
                         ? <div className="cardButtons">
