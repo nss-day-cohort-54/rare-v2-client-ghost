@@ -3,19 +3,12 @@ import { getCurrentUser } from "../users/UserManager"
 import { Post } from "./Post"
 import { getUserPosts } from "./PostManager"
 
-export const MyPosts = ( { refreshState, setRefreshState }) => {
+export const MyPosts = ( { refreshState, setRefreshState, currentUser }) => {
     const [posts, setPosts] = useState([])
-    const [currentUser, setUser] = useState({})
-    const userId = currentUser.id
-
-    useEffect(() => {
-        getCurrentUser()
-        .then((data) => setUser(data))
-    }, [refreshState])
 
 
     useEffect(() => {
-        getUserPosts(userId)
+        getUserPosts(currentUser.id)
             .then((data) => setPosts(data))
             .then(() => setRefreshState(false))
     }, [currentUser, refreshState])
@@ -25,7 +18,7 @@ export const MyPosts = ( { refreshState, setRefreshState }) => {
         {
             posts.map(post => {
                 return <div key={`post-${post.id}`}>
-                    <Post listView={true} cardView={true} post={post} />
+                    <Post listView={true} cardView={true} post={post} currentUser={currentUser} />
                 </div> 
             })
         }

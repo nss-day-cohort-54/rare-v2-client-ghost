@@ -5,7 +5,7 @@ import { AllPosts } from "./posts/AllPosts.js"
 import { UserList } from "./users/UserList.js"
 import { AllTags } from "./tags/AllTags.js"
 import { AllCategories } from "./categories/AllCategories"
-
+import { getAllTags } from "./tags/TagManager.js"
 import { User } from "./users/User.js"
 import { CreatePosts } from "./posts/CreatePosts.js"
 import { MyPosts } from "./posts/MyPosts.js"
@@ -18,6 +18,7 @@ export const ApplicationViews = () => {
   //state to refresh state when new object is submitted
   const [refreshState, setRefreshState] = useState(false)
   const [currentUser, setUser] = useState()
+  const [tags, setTags] = useState([])
 
   useEffect(
     () => {
@@ -28,13 +29,22 @@ export const ApplicationViews = () => {
   )
 
 
+    // use UseEffect to getAllTags and set the state of the tag array.
+    useEffect(() => {
+        getAllTags()
+        .then(data => setTags(data))
+        .then(setRefreshState(false))
+    },
+    [refreshState])
+
+
   return (
     <>
       <Route exact path="/">
         <Home />
       </Route>
       <Route exact path="/posts/all">
-        <AllPosts />
+        <AllPosts currentUser={currentUser} />
       </Route>
       <Route exact path="/users">
         <UserList />
@@ -43,7 +53,7 @@ export const ApplicationViews = () => {
         <User listView={false} />
       </Route>
       <Route path="/tags">
-        <AllTags refreshState={refreshState} setRefreshState={setRefreshState} />
+        <AllTags currentUser={currentUser} tags={tags} refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/newPost">
         <CreatePosts currentUser={currentUser} editing={false} />
@@ -58,7 +68,7 @@ export const ApplicationViews = () => {
         <SinglePost />
       </Route>
       <Route exact path="/posts/myPosts">
-        <MyPosts refreshState={refreshState} setRefreshState={setRefreshState} />
+        <MyPosts currentUser={currentUser} refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/posts/user/:userId(\d+)">
         <PostsByUser />

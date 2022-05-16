@@ -4,7 +4,7 @@ import { deletePost } from "../posts/PostManager"
 import { useHistory } from "react-router-dom"
 import { deleteTag } from "../tags/TagManager"
 
-export const ButtonControls = ({ isPost=undefined, id=undefined, commentId=undefined, getComments=undefined, isTags=undefined, setRefreshState=undefined }) => {
+export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, setRefreshState }) => {
   const history = useHistory()
       
   return <div>
