@@ -19,7 +19,7 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
         {/* Content needed in all posts list */}
         {/* Title, Author, Date, Category, Tags */}
         {
-            listView && cardView
+            listView && cardView && currentUser
                 ? <div key={`post--${post.id}`} className="postCard">
                     <div className="cardTitle">
                         <div>
@@ -39,7 +39,7 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                             {
                                 post.author.id === currentUser?.id
                                     ? <div className="cardButtons">
-                                        <ButtonControls isPost={true} postId={post.id} />
+                                        <ButtonControls isPost={true} id={post.id} />
                                     </div>
                                     : null
                             }
@@ -54,8 +54,8 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                                 {post.title}
                             </Link>
                             {
-                                post.userId === currentUser?.id
-                                    ? <ButtonControls isPost={true} postId={post.id} manageTags={true} />
+                                post.author?.id === currentUser?.id
+                                    ? <ButtonControls isPost={true} id={post.id} manageTags={true} />
 
                                     : null
                             }
@@ -70,10 +70,10 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                         <div className="postDetailsMain">
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
-                                    {
-                                        post.author.id === currentUser?.id
+                                    {   
+                                        currentUser?.id === post.author.id
                                             ? <>
-                                            <ButtonControls isPost={true} postId={post.id} />
+                                            <ButtonControls isPost={true} id={post.id} />
                                             <button>Manage Tags</button>
                                             </>
                                             : null
@@ -95,7 +95,7 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                             </div>
                             {
                                 showComments
-                                    ? <CommentList postId={post.id} />
+                                    ? <CommentList id={post.id} />
                                     : 
                                     <>
                                     <div>{post.content}</div>

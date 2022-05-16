@@ -43,7 +43,7 @@ export const ApplicationViews = () => {
         <Home />
       </Route>
       <Route exact path="/posts/all">
-        <AllPosts />
+        <AllPosts currentUser={currentUser} />
       </Route>
       <Route exact path="/users">
         <UserList />
