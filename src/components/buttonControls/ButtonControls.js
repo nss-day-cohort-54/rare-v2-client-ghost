@@ -12,7 +12,7 @@ export const ButtonControls = ({ isPost=undefined, id=undefined, commentId=undef
       
       {
         isPost ? <div>Are you sure you want to delete this post?</div>
-        : isTags ? <div>Are you sure you want to delete this tag? {id}</div>
+        : isTags ? <div>Are you sure you want to delete this tag?</div>
         : <div>Are you sure you want to delete this comment?</div>
       }
       
