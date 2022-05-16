@@ -4,17 +4,8 @@ import { NewTagForm } from "./CreateTagForm";
 
 
 
-export const AllTags = ({refreshState, setRefreshState}) => {
+export const AllTags = ({refreshState, setRefreshState, tags}) => {
 
-    const [tags, setTags] = useState([])
-
-    // use UseEffect to getAllTags and set the state of the tag array.
-    useEffect(() => {
-        getAllTags()
-        .then(data => setTags(data))
-        .then(setRefreshState(false))
-    },
-    [refreshState])
 
     return <>
         <div>All Tags</div>

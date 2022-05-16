@@ -129,9 +129,5 @@ export const Post = ({ listView, cardView, post }) => {
                         </div>
                     </div>
         }
-        {/* Content needed in card view */}
-        {/* Title, Image, Author Name (not username), Publication date, reaction count */}
-        {/* Content needed in post details */}
-        {/* Title, category, tags, content, username, image, reactions */}
     </>
 }
