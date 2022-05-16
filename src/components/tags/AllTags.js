@@ -6,20 +6,9 @@ import { ButtonControls } from "../buttonControls/ButtonControls";
 
 
 
-export const AllTags = ({refreshState, setRefreshState}) => {
+export const AllTags = ({refreshState, setRefreshState, tags, currentUser}) => {
 
-    const [tags, setTags] = useState([])
-    const [currentUser, setUser] = useState({})
-    // use UseEffect to getAllTags and set the state of the tag array.
 
-    useEffect(() => {
-        getCurrentUser()
-            .then((data) => setUser(data))
-            .then(getAllTags)
-            .then(data => setTags(data))
-            .then(setRefreshState(false))
-        },
-        [refreshState])
 
     return <>
         <div>All Tags</div>

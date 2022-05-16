@@ -30,7 +30,6 @@ export const Register = ({setToken}) => {
       registerUser(newUser)
         .then(res => {
           if ("valid" in res && res.valid) {
-            debugger
             setToken(res.token)
             history.push("/")
           }

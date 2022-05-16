@@ -3,22 +3,12 @@ import { useHistory } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { ButtonControls } from "../buttonControls/ButtonControls"
 import { CommentList } from "../comments/CommentsList"
-import { getCurrentUser } from "../users/UserManager"
 import "./Post.css"
 // function that renders a single post
-export const Post = ({ listView, cardView, post }) => {
+export const Post = ({ listView, cardView, post, currentUser }) => {
 
     const [showComments, setShowComments] = useState(false)
-    const history = useHistory()
-    const [currentUser, setUser] = useState({})
-    const userId = currentUser.id
-    useEffect(
-        () => {
-            getCurrentUser()
-                .then((data) => setUser(data))
-        },
-        []
-    )
+  
 
     const formatDate = (postDate) => {
         let date = new Date(postDate)
@@ -47,7 +37,7 @@ export const Post = ({ listView, cardView, post }) => {
                         <div className="cardFunctions">
                             <div>Reaction Count: 0</div>
                             {
-                                post.author.id === userId
+                                post.author.id === currentUser?.id
                                     ? <div className="cardButtons">
                                         <ButtonControls isPost={true} postId={post.id} />
                                     </div>
@@ -64,8 +54,9 @@ export const Post = ({ listView, cardView, post }) => {
                                 {post.title}
                             </Link>
                             {
-                                post.author.id === userId
-                                    ? <ButtonControls isPost={true} postId={post.id} />
+                                post.userId === currentUser?.id
+                                    ? <ButtonControls isPost={true} postId={post.id} manageTags={true} />
+
                                     : null
                             }
                         </div>
@@ -80,8 +71,11 @@ export const Post = ({ listView, cardView, post }) => {
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
                                     {
-                                        post.author.id === userId
-                                            ? <ButtonControls isPost={true} postId={post.id} />
+                                        post.author.id === currentUser?.id
+                                            ? <>
+                                            <ButtonControls isPost={true} postId={post.id} />
+                                            <button>Manage Tags</button>
+                                            </>
                                             : null
                                     }
                                 </div>
@@ -102,7 +96,20 @@ export const Post = ({ listView, cardView, post }) => {
                             {
                                 showComments
                                     ? <CommentList postId={post.id} />
-                                    : <div>{post.content}</div>
+                                    : 
+                                    <>
+                                    <div>{post.content}</div>
+                                    {/* If post has tags */}
+                                    {post.tags?.length > 0 ? 
+                                    <div>
+                                    Tags: 
+                                    {post.tags.map(tag => {
+                                        return <div key={`tag--${tag.id}`}>{tag.label}</div>
+                                    })}
+                                    </div>
+                                    // if post has no tags
+                                    :""}
+                                    </>
                             }
                             {
                                 showComments
@@ -110,12 +117,7 @@ export const Post = ({ listView, cardView, post }) => {
                                     : <button onClick={() => setShowComments(true)}>View Comments</button>
                             }
                         </div>
-                        <div className="postDetailsTags">{post.tags?.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div>
                     </div>
         }
-        {/* Content needed in card view */}
-        {/* Title, Image, Author Name (not username), Publication date, reaction count */}
-        {/* Content needed in post details */}
-        {/* Title, category, tags, content, username, image, reactions */}
     </>
 }
