@@ -2,16 +2,17 @@ import { Settings } from "../utils/Settings"
 import { deleteComment } from "../comments/CommentManager"
 import { deletePost } from "../posts/PostManager"
 import { useHistory } from "react-router-dom"
+import { deleteTag } from "../tags/TagManager"
 
-export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
+export const ButtonControls = ({ isPost=undefined, id=undefined, commentId=undefined, getComments=undefined, isTags=undefined, setRefreshState=undefined }) => {
   const history = useHistory()
-
+      
   return <div>
-    <dialog id={`anything-${isPost}`}>
+    <dialog id={`anything-${id}`}>
       
       {
-        isPost
-        ? <div>Are you sure you want to delete this post?</div>
+        isPost ? <div>Are you sure you want to delete this post?</div>
+        : isTags ? <div>Are you sure you want to delete this tag?</div>
         : <div>Are you sure you want to delete this comment?</div>
       }
       
@@ -21,22 +22,33 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
             (e) => {
               e.preventDefault()
               if (isPost) {
-                debugger
-                deletePost(postId)
+                deletePost(id)
                   .then(
                     () => {
                       history.push("/")
+                    })
+              } else if (isTags) {
+                deleteTag(id)
+                  .then(
+                    () => {
+                      const buttonTarget = document.querySelector(`#anything-${id}`)
+                      buttonTarget.close()
+                    }
+                  )
+                  .then(
+                    () => {
+                      setRefreshState(true)
                     })
               } else {
                 deleteComment(commentId)
                   .then(
                     () => {
-                      getComments(postId)
+                      getComments(id)
                     }
                   )
                   .then(
                     () => {
-                      const buttonTarget = document.querySelector(`#anything-${isPost}`)
+                      const buttonTarget = document.querySelector(`#anything-${id}`)
                       buttonTarget.close()
                     }
                   )
@@ -48,7 +60,7 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
           onClick={
             (e) => {
               e.preventDefault()
-              const buttonTarget = document.querySelector(`#anything-${isPost}`)
+              const buttonTarget = document.querySelector(`#anything-${id}`)
               buttonTarget.close()
             }
           }
@@ -59,7 +71,9 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
     </dialog>
     <button onClick={() => {
       if(isPost) {
-        history.push(`/editPost/${postId}`)
+        history.push(`/editPost/${id}`)
+      } else if(isTags) {
+          history.push('/tags')
       } else {
         window.alert("Cannot edit comments")
       }
@@ -67,7 +81,7 @@ export const ButtonControls = ({ isPost, postId, commentId, getComments }) => {
       <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
     </button>
     <button onClick={() => {
-      const buttonTarget = document.querySelector(`#anything-${isPost}`)
+      const buttonTarget = document.querySelector(`#anything-${id}`)
       buttonTarget.showModal()
     }}>
       <img className="deleteIcon" src={`${Settings.DeleteIcon}`} width="25px" height="25px" />

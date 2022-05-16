@@ -20,3 +20,12 @@ export const submitNewTag = (tag) => {
   })
   .then(res => res.json())
 }
+
+export const deleteTag = (tagId) => {
+  return fetch(`${Settings.API}/tags/${tagId}`, {
+      method: "DELETE",
+      headers:{
+          "Authorization": `Token ${localStorage.getItem("token")}`
+      }
+  })
+}
