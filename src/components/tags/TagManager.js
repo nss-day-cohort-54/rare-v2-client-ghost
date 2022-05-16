@@ -9,6 +9,7 @@ export const getAllTags = () => {
   })
       .then(response => response.json())
 }
+
 export const getSingleTag = (id) => {
   return fetch(`${Settings.API}/tags/${id}`, {
       headers:{
@@ -17,6 +18,7 @@ export const getSingleTag = (id) => {
   })
       .then(response => response.json())
 }
+
 export const sendTagEdit = (tag) => {
   const id = tag.id
   return fetch(`${Settings.API}/tags/${id}`, {
@@ -28,7 +30,6 @@ export const sendTagEdit = (tag) => {
       body: JSON.stringify(tag)
   })
 }
-
 
 export const submitNewTag = (tag) => {
   return fetch(`${Settings.API}/tags`, {

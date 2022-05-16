@@ -2,11 +2,16 @@ import { Settings } from "../utils/Settings"
 import { deleteComment } from "../comments/CommentManager"
 import { deletePost } from "../posts/PostManager"
 import { useHistory } from "react-router-dom"
-import { deleteTag } from "../tags/TagManager"
+import { deleteTag, sendTagEdit } from "../tags/TagManager"
+import { useEffect, useState } from "react"
 
-export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, setRefreshState }) => {
+export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, setRefreshState, tag }) => {
   const history = useHistory()
-      
+  const [singleTag, setSingleTag] = useState()
+  useEffect(() => {
+    setSingleTag(tag)
+}, [tag])
+
   return <div>
     <dialog id={`anything-${id}`}>
       
@@ -73,7 +78,13 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
       if(isPost) {
         history.push(`/editPost/${id}`)
       } else if(isTags) {
-          history.push(`/editTag/${id}`)
+          const val = prompt("Edit Tag:", tag.label)
+          const newTag = {
+            id:tag.id,
+            label:val
+          }
+          sendTagEdit(newTag)
+          .then(setRefreshState(true))
       } else {
         window.alert("Cannot edit comments")
       }
