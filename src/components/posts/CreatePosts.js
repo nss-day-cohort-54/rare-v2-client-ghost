@@ -7,7 +7,7 @@ import { createPost, getSinglePost, updatePost } from "./PostManager";
 
 
 
-export const CreatePosts = ( { currentUser }) => {
+export const CreatePosts = ({ currentUser, tags }) => {
 
     const [posts, setPosts] = useState([])
     const [categories, setCategories] = useState([])
@@ -24,17 +24,19 @@ export const CreatePosts = ( { currentUser }) => {
         approved: 1
     })
 
+    const [selectedTags, setSelectedTags] = useState([])
+
     useEffect(() => {
         getAllCategories()
-        .then((categories) => {
-            setCategories(categories)
-            if (postId) {
-                getSinglePost(parseInt(postId))
-                    .then(post => {
-                        setPost(post)
-                    })
-            }
-        })
+            .then((categories) => {
+                setCategories(categories)
+                if (postId) {
+                    getSinglePost(parseInt(postId))
+                        .then(post => {
+                            setPost(post)
+                        })
+                }
+            })
     }, [])
 
     const handleInputChange = (event) => {
@@ -67,7 +69,8 @@ export const CreatePosts = ( { currentUser }) => {
                 image_url: post.image_url,
                 content: post.content,
                 approved: false,
-                user: currentUser.id
+                user: currentUser.id,
+                tags: selectedTags
 
             })
                 .then(() => history.push("/posts/myposts"))
@@ -122,6 +125,37 @@ export const CreatePosts = ( { currentUser }) => {
                             )
                         })}
                     </select>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div className="form_group">
+                    <label htmlFor="tag"> Tags: </label>
+                    {tags.map(tag => {
+                        return <>
+                            {selectedTags.includes(tag.id) ?
+                                //if the tag is in the array
+                                <>
+                                    <input type="checkbox" key={`tag--${tag.id}`} checked={true} name={tag.label} value={tag.id} onClick={(e) => {
+                                        const copy = [...selectedTags]
+                                        const filteredCopy = copy.filter(t => t != e.target.value) 
+                                        setSelectedTags(filteredCopy)
+                                        }}/>
+                                    <label htmlFor={tag.label}>{tag.label}</label>
+                                </>
+
+                                : //If a tag is not in the array
+                                <>
+                                    <input type="checkbox" key={`tag--${tag.id}`} name={tag.label} value={tag.id} onClick={() => {
+                                        const copy = [...selectedTags]
+                                        copy.push(tag.id)
+                                        setSelectedTags(copy)
+                                    }
+                                    } /><label htmlFor={tag.label}>{tag.label}</label>
+                                </>
+                            }
+
+                        </>
+                    })}
                 </div>
             </fieldset>
             <button type="submit"
