@@ -78,13 +78,17 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
       if(isPost) {
         history.push(`/editPost/${id}`)
       } else if(isTags) {
+        // prompt allows user to edit tag label
           const val = prompt("Edit Tag:", tag.label)
+          // prompt returns null if cancel button is pressed
+          if (val !== null) {
           const newTag = {
             id:tag.id,
             label:val
           }
           sendTagEdit(newTag)
           .then(setRefreshState(true))
+        }
       } else {
         window.alert("Cannot edit comments")
       }
