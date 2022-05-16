@@ -3,22 +3,12 @@ import { useHistory } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { ButtonControls } from "../buttonControls/ButtonControls"
 import { CommentList } from "../comments/CommentsList"
-import { getCurrentUser } from "../users/UserManager"
 import "./Post.css"
 // function that renders a single post
-export const Post = ({ listView, cardView, post }) => {
+export const Post = ({ listView, cardView, post, currentUser }) => {
 
     const [showComments, setShowComments] = useState(false)
-    const history = useHistory()
-    const [currentUser, setUser] = useState({})
-
-    useEffect(
-        () => {
-            getCurrentUser()
-                .then((data) => setUser(data))
-        },
-        []
-    )
+  
 
     const formatDate = (postDate) => {
         let date = new Date(postDate)
@@ -47,7 +37,7 @@ export const Post = ({ listView, cardView, post }) => {
                         <div className="cardFunctions">
                             <div>Reaction Count: 0</div>
                             {
-                                post.userId === currentUser.id
+                                post.author.id === currentUser?.id
                                     ? <div className="cardButtons">
                                         <ButtonControls isPost={true} postId={post.id} />
                                     </div>
@@ -64,7 +54,7 @@ export const Post = ({ listView, cardView, post }) => {
                                 {post.title}
                             </Link>
                             {
-                                post.userId === currentUser.id
+                                post.userId === currentUser?.id
                                     ? <ButtonControls isPost={true} postId={post.id} manageTags={true} />
 
                                     : null
@@ -81,7 +71,7 @@ export const Post = ({ listView, cardView, post }) => {
                             <div className="postDetailsTitle">
                                 <div className="cardButtons">
                                     {
-                                        post.author.id === currentUser.id
+                                        post.author.id === currentUser?.id
                                             ? <>
                                             <ButtonControls isPost={true} postId={post.id} />
                                             <button>Manage Tags</button>
@@ -94,7 +84,7 @@ export const Post = ({ listView, cardView, post }) => {
                             <div><img src={`${post.imageUrl || "https://picsum.photos/300/100"}`} /></div>
                             <div className="postDetailsBelowCard">
                                 <div>By
-                                    <Link to={`/users/${post.userId}`} >
+                                    <Link to={`/users/${post.author.id}`} >
                                         {post.author.user.username}
                                     </Link>
                                     <div>
