@@ -21,6 +21,7 @@ export const AllTags = ({refreshState, setRefreshState, tags, currentUser}) => {
                             <ButtonControls 
                                 isTags={true} 
                                 id={tag.id} 
+                                tags={tags}
                                 setRefreshState={setRefreshState} />
                             </div>
                         : null

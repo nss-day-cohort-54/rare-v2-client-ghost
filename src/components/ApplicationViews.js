@@ -13,6 +13,7 @@ import { PostsByUser } from "./posts/PostsByUser.js"
 import { SinglePost } from "./posts/SinglePost.js"
 import { getCurrentUser } from "./users/UserManager";
 import { NewTagForm } from "./tags/CreateTagForm.js"
+import { EditTag } from "./tags/EditTag.js"
 
 export const ApplicationViews = () => {
   //state to refresh state when new object is submitted
@@ -62,7 +63,7 @@ export const ApplicationViews = () => {
         <CreatePosts currentUser={currentUser} editing={true} />
       </Route>
       <Route exact path="/editTag/:tagId(\d+)">
-        <NewTagForm currentUser={currentUser} editing={true} />
+        <EditTag currentUser={currentUser} refreshState={refreshState} setRefreshState={setRefreshState}/>
       </Route>
       <Route exact path="/posts/single/:postId(\d+)">
         <SinglePost />

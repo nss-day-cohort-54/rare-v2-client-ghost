@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { submitNewTag } from "./TagManager";
 
 
-export const NewTagForm = ({ setRefreshState, editing }) => {
+export const NewTagForm = ({ setRefreshState }) => {
     const [newTagForm, setNewTagForm] = useState(false)
     const [form, updateForm] = useState({ label: "" })
-    if (editing) {
-        setNewTagForm(true)
-    }
+    
 
 
     return (
