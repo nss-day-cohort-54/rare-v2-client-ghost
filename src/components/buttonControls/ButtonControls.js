@@ -73,7 +73,7 @@ export const ButtonControls = ({ isPost=undefined, id=undefined, commentId=undef
       if(isPost) {
         history.push(`/editPost/${id}`)
       } else if(isTags) {
-          history.push('/tags')
+          history.push(`/editTag/${id}`)
       } else {
         window.alert("Cannot edit comments")
       }
