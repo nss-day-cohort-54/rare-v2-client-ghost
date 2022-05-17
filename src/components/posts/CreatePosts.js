@@ -4,11 +4,12 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { getAllCategories } from "../categories/CategoryManager";
+import { addTag, removeTag } from "../tags/TagManager";
 import { createPost, getSinglePost, updatePost } from "./PostManager";
 
 
 
-export const CreatePosts = ( { currentUser }) => {
+export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }) => {
 
     const [posts, setPosts] = useState([])
     const [categories, setCategories] = useState([])
@@ -25,6 +26,8 @@ export const CreatePosts = ( { currentUser }) => {
         content: "",
         approved: 1
     })
+
+    const [selectedTags, setSelectedTags] = useState([])
 
     useEffect(() => {
         if (editMode) {
@@ -43,16 +46,16 @@ export const CreatePosts = ( { currentUser }) => {
 
     useEffect(() => {
         getAllCategories()
-        .then((categories) => {
-            setCategories(categories)
-            if (postId) {
-                getSinglePost(parseInt(postId))
-                    .then(post => {
-                        setOriginalPost(post)
-                    })
-            }
-        })
-    }, [])
+            .then((categories) => {
+                setCategories(categories)
+                if (postId) {
+                    getSinglePost(parseInt(postId))
+                        .then(post => {
+                            setOriginalPost(post)
+                        })
+                }
+            })
+    }, [refreshState])
 
     const handleInputChange = (event) => {
         const newPost = { ...post }
@@ -84,7 +87,8 @@ export const CreatePosts = ( { currentUser }) => {
                 image_url: post.image_url,
                 content: post.content,
                 approved: false,
-                user: currentUser.id
+                user: currentUser.id,
+                tags: selectedTags
 
             })
                 .then(() => history.push("/posts/myposts"))
@@ -139,6 +143,68 @@ export const CreatePosts = ( { currentUser }) => {
                             )
                         })}
                     </select>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div className="form_group">
+                    <label htmlFor="tag"> Tags: </label>
+                    {editMode == false ?
+                        tags.map(tag => {
+                            return <>
+                                {selectedTags.includes(tag.id) ?
+                                    //if the tag is in the array
+                                    <>
+                                        <input type="checkbox" key={`tag--${tag.id}`} checked={true} name={tag.label} value={tag.id} onClick={(e) => {
+                                            const copy = [...selectedTags]
+                                            const filteredCopy = copy.filter(t => t != e.target.value)
+                                            setSelectedTags(filteredCopy)
+                                        }} />
+                                        <label htmlFor={tag.label}>{tag.label}</label>
+                                    </>
+                                    : //If a tag is not in the array
+                                    <>
+                                        <input type="checkbox" key={`tag--${tag.id}`} name={tag.label} value={tag.id} onClick={() => {
+                                            const copy = [...selectedTags]
+                                            copy.push(tag.id)
+                                            setSelectedTags(copy)
+                                        }
+                                        } /><label htmlFor={tag.label}>{tag.label}</label>
+                                    </>
+                                }
+                            </>
+
+                        }) : 
+                        tags.map(tag => {
+                            return <>
+                                {(originalPost.tags?.some(t => t.id === tag.id) ?
+                                    <>
+                                        <input type="checkbox" key={`tag--${tag.id}`} checked={true} name={tag.label} value={tag.id} 
+                                        onClick={(e) => {
+                                            const tag = {}
+                                            tag.tag_id=e.target.value
+                                            removeTag(tag, originalPost.id)
+                                            setRefreshState(true)
+
+                                        }}/>
+                                        <label htmlFor={tag.label}>{tag.label}</label>
+                                    </>
+                                    : <>
+                                    <input type="checkbox" key={`tag--${tag.id}`} name={tag.label} value={tag.id} onClick={(e) => {
+                                            const tag = {}
+                                            tag.tag_id=e.target.value
+                                            addTag(tag, originalPost.id)
+                                            setRefreshState(true)
+
+                                        }}/>
+                                    
+                                    <label htmlFor={tag.label}>{tag.label}
+                                    </label>
+                                    </>
+                        )}
+                            </>
+                        }
+                        )
+                    }
                 </div>
             </fieldset>
             <button type="submit"
