@@ -22,6 +22,8 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments }) =
     }
 
     return <div className="comment" >
+
+        
         {/* 
                 JSX for comment
                 should have 
@@ -29,9 +31,11 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments }) =
                     author
                 deleteComment displayed if comment author is current user
             */}
-        <div>{commentObject.content}</div>
+        <div>Subject: {commentObject.subject}</div>
         
-        <div>{commentObject.user?.username}</div>
+        <div>{commentObject.content}</div>
+    
+        <div>By: {commentObject.author?.user.username}</div><br></br>
         {
             currentAuthor
                 ? <div>
