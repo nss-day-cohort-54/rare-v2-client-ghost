@@ -103,7 +103,7 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
             label: val
           }
           sendTagEdit(newTag)
-            .then(setRefreshState(true))
+            .then(()=>setRefreshState(true))
         }
       } else if (isCategories) {
         // prompt state initialized with category label to edit
@@ -114,7 +114,7 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
             label: val
           }
           editCategory(categoryEdit)
-            .then(setRefreshState(true))
+            .then(()=>setRefreshState(true))
         }
       } else {
         window.alert("Cannot edit comments")
