@@ -20,19 +20,14 @@ export const ApplicationViews = () => {
   const [currentUser, setUser] = useState()
   const [tags, setTags] = useState([])
 
-  useEffect(
-    () => {
-      getCurrentUser()
-        .then(data => setUser(data))
-    },
-    []
-  )
 
 
     // use UseEffect to getAllTags and set the state of the tag array.
     useEffect(() => {
         getAllTags()
         .then(data => setTags(data))
+        .then(getCurrentUser()
+          .then(data => setUser(data)))
         .then(setRefreshState(false))
     },
     [refreshState])

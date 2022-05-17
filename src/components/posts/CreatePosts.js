@@ -20,11 +20,11 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
 
     const [post, setPost] = useState({
         title: "",
-        category: 0,
         publication_date: Date.now(),
+        category:1,
         image_url: "",
-        content: "",
-        approved: 1
+        content: ""
+        
     })
 
     const [selectedTags, setSelectedTags] = useState([])
@@ -80,21 +80,32 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
                 .then(() => history.push("/posts/all"))
 
         } else {
-            createPost({
-                title: post.title,
-                category: category_id,
-                publication_date: new Date(),
-                image_url: post.image_url,
-                content: post.content,
-                approved: false,
-                user: currentUser.id,
-                tags: selectedTags
+            if (currentUser.is_staff === true) {
 
-            })
+                createPost({
+                    title: post.title,
+                    category: category_id,
+                    publication_date: new Date(),
+                    image_url: post.image_url,
+                    content: post.content,
+                    user: currentUser.id,
+                    approved: true
+                    
+                })
                 .then(() => history.push("/posts/myposts"))
-        }
-
-    }
+            } else {
+                createPost({
+                    title: post.title,
+                    category: category_id,
+                    publication_date: new Date(),
+                    image_url: post.image_url,
+                    content: post.content,
+                    user: currentUser.id,
+                    approved: false
+                    
+                })
+                .then(() => history.push("/posts/myposts"))
+    }}}
 
     return (
         <form className="postForm">
