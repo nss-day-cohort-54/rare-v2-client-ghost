@@ -6,9 +6,9 @@ import { ButtonControls } from "../buttonControls/ButtonControls";
 
 
 
+
 export const AllTags = ({refreshState, setRefreshState, tags, currentUser}) => {
-
-
+    
 
     return <>
         <div>All Tags</div>
@@ -21,6 +21,7 @@ export const AllTags = ({refreshState, setRefreshState, tags, currentUser}) => {
                             <ButtonControls 
                                 isTags={true} 
                                 id={tag.id} 
+                                tag={tag}
                                 setRefreshState={setRefreshState} />
                             </div>
                         : null
