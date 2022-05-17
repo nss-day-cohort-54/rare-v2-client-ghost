@@ -32,7 +32,6 @@ export const AllCategories = ({ refreshState, setRefreshState }) => {
     return <>
         <div>All Categories</div>
         {categories.map((category) => {
-
             return <div key={`category--${category.id}`}>{category.label}
                 {staff ? <ButtonControls isCategories={true} id={category.id} setRefreshState={setRefreshState} category={category}/> : ""}
                     
