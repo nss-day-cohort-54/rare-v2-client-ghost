@@ -89,7 +89,8 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
                     image_url: post.image_url,
                     content: post.content,
                     user: currentUser.id,
-                    approved: true
+                    approved: true,
+                    tags: selectedTags
                     
                 })
                 .then(() => history.push("/posts/myposts"))
@@ -101,7 +102,8 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
                     image_url: post.image_url,
                     content: post.content,
                     user: currentUser.id,
-                    approved: false
+                    approved: false,
+                    tags: selectedTags
                     
                 })
                 .then(() => history.push("/posts/myposts"))
