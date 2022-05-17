@@ -35,6 +35,7 @@ export const CommentForm = ({ postId, getComments }) => {
             textarea form input
             button to submit comment
         */}
+        <b>Create a Comment</b>
         <label htmlFor="subject">Subject:</label>
         <input id="subject" name="subject"
                     onChange={(e) => setSubject(e.target.value)}

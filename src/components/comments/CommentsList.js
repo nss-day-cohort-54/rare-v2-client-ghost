@@ -5,6 +5,7 @@
 // Component for comment form
 
 import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
 import { getCurrentUser } from "../users/UserManager"
 import { Comment } from "./Comment"
 import { CommentForm } from "./CommentForm"
@@ -15,11 +16,13 @@ import { getCommentsByPostId } from "./CommentManager"
 
 // From Individual Post Component
 // <CommentList postId={id} /> - displayed on a boolean
-export const CommentList = ({ postId, currentUser }) => {
+export const CommentList = () => {
     // declare state variable for comments array
     // const [comments, setComments] = useState([])
     const [comments, setComments] = useState([])
     const [user, setUser] = useState({})
+    const { postId } = useParams()
+    
     const userId = user.id
     // useEffect that pulls comments by postId
     useEffect(
@@ -37,6 +40,11 @@ export const CommentList = ({ postId, currentUser }) => {
         },
         []
     )
+
+
+
+
+
     /* 
         invoke function
         getCommentsByPostId()
@@ -60,23 +68,22 @@ export const CommentList = ({ postId, currentUser }) => {
 
 
     return <>
-        comments
+        <b>Comments</b>
+        
+        {
+            comments.map(comment => {
+                let currentAuthor = comment.author?.id === userId
+                return <div key={`comment--${comment.id}`}>
+                    <Comment postId={postId} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} />
+                </div>
+            })
+        }
         {/* <CommentForm postId={postId} /> */}
         <CommentForm postId={postId} getComments={getComments} />
         {/* 
         map over comments and invoke comment component
         other needed JSX tags for styling
     */}<br></br>
-        <div>Reactions</div>
-        {
-            comments.map(comment => {
-                let currentAuthor = comment.author_id === userId
-                return <div key={`comment--${comment.id}`}>
-
-                    <Comment postId={postId} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} />
-                </div>
-            })
-        }
 
     </>
 }
