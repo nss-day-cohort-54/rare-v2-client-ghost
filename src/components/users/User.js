@@ -10,12 +10,14 @@ import "./User.css"
 import { getSingleUser } from "./UserManager"
 import { Link } from "react-router-dom"
 import { SubForm } from "./SubForm"
+import { getUserPosts } from "../posts/PostManager"
 
 // function that generates JSX for individual user element
 export const User = ({ listView, user }) => {
     // probably want a prop that indicates whether 
     // content is being generated in a list vs individual page
     const [viewUser, setViewUser] = useState(user)
+    const [userPosts, setUserPosts] = useState([])
     const [postCount, setPostCount] = useState(0)
     const { userId } = useParams()
 
@@ -31,7 +33,9 @@ export const User = ({ listView, user }) => {
     useEffect(
         () => {
             if(viewUser) {
-                let count = viewUser?.posts.length
+                getUserPosts(userId)
+                .then(data => setUserPosts(data))
+                let count = userPosts.length
                 setPostCount(count)
             }
         }, [viewUser]
@@ -64,13 +68,14 @@ export const User = ({ listView, user }) => {
         {listView 
             ? <div className="singleUser">
                 <div>
-                    <Link to={`/users/${user.id}`}>
-                    {user.username}
+                    <Link to={`/users/${user.user.id}`}>
+                    {user.user.username}
                     </Link>
                 </div>
-                <div>{user.firstName}</div>
-                <div>{user.lastName}</div>
-                <div>{user.email}</div>
+                <div>{user.user.first_name}</div>
+                <div>{user.user.last_name}</div>
+                <div>{user.user.email}</div>
+                <div>{user.user.is_staff ? "Admin" : "User"}</div>
             </div> 
             : viewUser
                 ? <div>
