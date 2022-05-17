@@ -34,7 +34,7 @@ export const UserList = () => {
         <div>Email</div>
     </div>
     {
-        users.map(user => {
+        users?.map(user => {
             return <div key={`user-${user.id}`}>
                 <User user={user} listView={true} />
             </div>
