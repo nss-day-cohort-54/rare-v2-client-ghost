@@ -12,6 +12,7 @@ import { MyPosts } from "./posts/MyPosts.js"
 import { PostsByUser } from "./posts/PostsByUser.js"
 import { SinglePost } from "./posts/SinglePost.js"
 import { getCurrentUser } from "./users/UserManager";
+import { NewTagForm } from "./tags/CreateTagForm.js"
 
 export const ApplicationViews = () => {
   //state to refresh state when new object is submitted

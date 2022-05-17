@@ -5,7 +5,7 @@ import { submitNewTag } from "./TagManager";
 export const NewTagForm = ({ setRefreshState }) => {
     const [newTagForm, setNewTagForm] = useState(false)
     const [form, updateForm] = useState({ label: "" })
-
+    
 
 
     return (
