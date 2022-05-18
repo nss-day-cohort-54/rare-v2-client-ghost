@@ -1,13 +1,17 @@
 // imports
 // addComment from CommentManager
 import { useState } from "react"
-import { addComment } from "./CommentManager"
+import { useHistory } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import { addComment, editComment, getCommentsByPostId, getComments } from "./CommentManager"
 
 // export function that handles comment form entry
 export const CommentForm = ({ postId, getComments }) => {
     // declare state variable for comment to add
     const [newComment, setComment] = useState("")
     const [subject, setSubject] = useState("")
+    const {postId, commentId} = useParams()
+    const history = useHistory()
     
     // function to handle comment submission
     const submitComment = () => {
@@ -30,6 +34,18 @@ export const CommentForm = ({ postId, getComments }) => {
             window.alert("Please fill out your comment before submitting.")
         }
     }
+
+    const editMode = commentId ? true : false
+    
+
+    useEffect(() => {
+        if (editMode) {
+            getCommentById(commentId).then((res) => {
+                setComment(res.content)
+            })
+        }
+    },[])
+
     return <>
         {/* 
             textarea form input

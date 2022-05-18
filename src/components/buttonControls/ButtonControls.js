@@ -115,7 +115,7 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
           editCategory(categoryEdit)
             .then(()=>setRefreshState(true))
         }
-      } else {
+      } else if (isComment) {
         window.alert("Cannot edit comments")
       }
     }}>
