@@ -7,10 +7,10 @@ import { getAllTags } from "../tags/TagManager";
 import { getAllCategories } from "../categories/CategoryManager";
 
 
-export const AllPosts = ( {currentUser} ) => {
+export const AllPosts = ({ currentUser }) => {
 
     const [posts, setPosts] = useState([])
-    const [users, setUsers] = useState([])
+    const [user, setUser] = useState({})
     const [tags, setTags] = useState([])
     const [categories, setCategories] = useState([])
     const [filter, setFilterType] = useState({ type: "all", value: "" })
@@ -18,10 +18,9 @@ export const AllPosts = ( {currentUser} ) => {
 
     useEffect(
         () => {
-            getAllUsers()
-                .then(setUsers)
+            setUser(currentUser)
         },
-        []
+        [currentUser]
     )
 
     useEffect(
@@ -51,11 +50,11 @@ export const AllPosts = ( {currentUser} ) => {
             searchPostTitles(filter.value)
                 .then(setPosts)
         } else if (filter.type === "category") {
-           searchPostCategories(filter.value)
+            searchPostCategories(filter.value)
                 .then(setPosts)
-        } 
-          // run category filter fetch with value
-          else if (filter.type === "user") {
+        }
+        // run category filter fetch with value
+        else if (filter.type === "user") {
             getUserPosts(filter.value)
                 .then(setPosts)
             // run user filter fetch with value
@@ -97,8 +96,8 @@ export const AllPosts = ( {currentUser} ) => {
                 value={filter.type === "category" ? filter.value : "0"}
                 onChange={e => {
                     e.preventDefault()
-                    if(e.target.value != "0") {
-                        let copy = JSON.parse(JSON.stringify(filter)) 
+                    if (e.target.value != "0") {
+                        let copy = JSON.parse(JSON.stringify(filter))
                         copy.type = "category"
                         copy.value = e.target.value
                         setFilterType(copy)
@@ -117,8 +116,8 @@ export const AllPosts = ( {currentUser} ) => {
                 })}
             </select>
         </fieldset>
-        
-        
+
+
         {/* filter by user jsx
         <fieldset id="authorDropdown">
             <select
@@ -155,7 +154,7 @@ export const AllPosts = ( {currentUser} ) => {
                 value={filter.type === "tag" ? filter.value : "0"}
                 onChange={e => {
                     e.preventDefault()
-                    let copy = JSON.parse(JSON.stringify(filter)) 
+                    let copy = JSON.parse(JSON.stringify(filter))
                     copy.type = "tag"
                     copy.value = e.target.value
                     setFilterType(copy)
@@ -185,12 +184,34 @@ export const AllPosts = ( {currentUser} ) => {
             posts.length > 0
                 ? posts.map((post) => {
                     return <div key={post.id} className="posts">
-                        <Post listView={true} cardView={false} post={post} currentUser={currentUser} />
+                        {post.approved === true ?
+                            <Post listView={true} cardView={false} post={post} currentUser={currentUser} />
+                            //does not display unapproved posts
+                            : ""}
                     </div>
                     // needs author name and category, publication date, content 
                 })
                 : "No posts"
         }
+        {user.is_staff === true ?
+            <>
+                <h3>Posts to be approved:</h3>
+                {posts.length > 0 ?
+                    posts.map((post) => {
+                        return <div key={post.id} className="posts">
+                            {post.approved === false ?
+
+                                <Post listView={true} cardView={false} post={post} currentUser={currentUser} />
+                                //all posts approved
+                                : ""}
+                        </div>
+        })
+        //no posts at all
+        :""
+    }
+    </>
+    //current user not a staff member
+        :""}
 
 
     </>
