@@ -62,7 +62,7 @@ export const User = ({ listView, user }) => {
             : viewUser
                 ? <div>
                     <div>Picture: <img src={`${viewUser.user.profileImageUrl || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} /></div>
-                    <div>Name: {viewUser.user.firstName} {viewUser.user.lastName}</div>
+                    <div>Name: {viewUser.user.first_name} {viewUser.user.last_name}</div>
                     <div>Username: {viewUser.user.username}</div>
                     <div>Email: {viewUser.user.email}</div>
                     <div>Creation Date: {viewUser.user.date_joined}</div>
