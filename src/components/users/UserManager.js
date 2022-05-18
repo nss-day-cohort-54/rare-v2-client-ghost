@@ -37,3 +37,14 @@ export const getSingleUser = (id) => {
     })
         .then(res => res.json())
 }
+
+export const changeActive = (user) => {
+    return fetch(`${Settings.API}/users/${user.id}`, {
+        method: "PUT",
+        headers:{
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify(user)
+    })
+}

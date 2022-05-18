@@ -42,10 +42,10 @@ export const ApplicationViews = () => {
         <AllPosts currentUser={currentUser} />
       </Route>
       <Route exact path="/users">
-        <UserList />
+        <UserList refreshState={refreshState}/>
       </Route>
       <Route exact path="/users/:userId(\d+)">
-        <User listView={false} />
+        <User listView={false} refreshState={refreshState}/>
       </Route>
       <Route path="/tags">
         <AllTags currentUser={currentUser} tags={tags} refreshState={refreshState} setRefreshState={setRefreshState} />

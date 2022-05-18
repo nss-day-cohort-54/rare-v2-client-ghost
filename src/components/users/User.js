@@ -7,19 +7,20 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import "./User.css"
-import { getSingleUser } from "./UserManager"
+import { changeActive, getAllUsers, getSingleUser } from "./UserManager"
 import { Link } from "react-router-dom"
 import { SubForm } from "./SubForm"
 import { getUserPosts } from "../posts/PostManager"
 
 // function that generates JSX for individual user element
-export const User = ({ listView, user }) => {
+export const User = ({ listView, user, refreshState, setUsers }) => {
     // probably want a prop that indicates whether 
     // content is being generated in a list vs individual page
     const [viewUser, setViewUser] = useState(user)
     const [userPosts, setUserPosts] = useState([])
     const [postCount, setPostCount] = useState(0)
     const { userId } = useParams()
+    const [checkActive, setActive] = useState(false)
 
     useEffect(
         () => {
@@ -58,6 +59,22 @@ export const User = ({ listView, user }) => {
                 <div>{user.user.last_name}</div>
                 <div>{user.user.email}</div>
                 <div>{user.user.is_staff ? "Admin" : "User"}</div>
+                <div>
+                    <input type="checkbox" id="is_active" name="is_active" checked={!user.user.is_active}
+                        onChange={()=> {
+                            // sets checkbox to opposite of current state
+                            setActive(!checkActive)
+                            const userObject = {
+                                id: user.user.id,
+                                is_staff: user.user.is_staff,
+                                username: user.user.username,
+                                is_active: checkActive
+                            }
+                            changeActive(userObject)
+                            .then(getAllUsers)
+                            .then(data=>setUsers(data))}}/>
+                    <label>Deactivate</label>
+                </div>
             </div> 
             : viewUser
                 ? <div>
