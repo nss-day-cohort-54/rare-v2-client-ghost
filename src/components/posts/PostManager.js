@@ -64,7 +64,7 @@ export const updatePost = (post) => {
 
 // get posts by user id
 export const getUserPosts = (userId) => {
-  return fetch(`${Settings.API}/posts?user_id=${userId}`, {
+  return fetch(`${Settings.API}/posts?user=${userId}`, {
     headers: {
       "Authorization": `Token ${localStorage.getItem("token")}`
     }
