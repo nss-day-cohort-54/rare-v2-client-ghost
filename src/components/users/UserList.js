@@ -20,27 +20,31 @@ export const UserList = () => {
                 setUsers(userData)
             })
     }, [])
-    // define needed functions
-    // will the users have any buttons?
-    // user links to individual pages probably don't need buttons/history.push()
-    // can just be <Link> tags
+
+    // sort by username, since username is in a depth of 1 in the api call
+    // sort method is used to sort usernames alphabetically
+    const sortedUsers = users.sort(
+        (a, b) =>
+            a.user.username.localeCompare(b.user.username)
+    )
 
     // return jsx
     return <>
-    <div className="singleUser">
-        <div>Username</div>
-        <div>First Name</div>
-        <div>Last Name</div>
-        <div>Email</div>
-    </div>
-    {
-        users.map(user => {
-            return <div key={`user-${user.id}`}>
-                <User user={user} listView={true} />
-            </div>
-        })
-    }
-    {/* 
+        <div className="singleUser">
+            <div>Username</div>
+            <div>First Name</div>
+            <div>Last Name</div>
+            <div>Email</div>
+            <div>Type</div>
+        </div>
+        {
+            sortedUsers.map(user => {
+                return <div key={`user-${user.id}`}>
+                    <User user={user} listView={true} />
+                </div>
+            })
+        }
+        {/* 
         map over users and invoke <User /> component for each
         add any other jsx tags as needed for styling
     */}

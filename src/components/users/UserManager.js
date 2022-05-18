@@ -9,7 +9,7 @@ import { Settings } from "../utils/Settings"
 // username
 // email
 export const getAllUsers = () => {
-    return fetch(`${Settings.API}/users`, {
+    return fetch(`${Settings.API}/authors`, {
         headers: {
             "Authorization": `Token ${localStorage.getItem("token")}`
         }

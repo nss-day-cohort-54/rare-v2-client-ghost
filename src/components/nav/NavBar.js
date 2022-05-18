@@ -1,5 +1,6 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
+import { getCurrentUser } from "../users/UserManager"
 import "./NavBar.css"
 import Logo from "./rare.jpeg"
 
@@ -7,6 +8,15 @@ export const NavBar = ({ token, setToken }) => {
   const history = useHistory()
   const navbar = useRef()
   const hamburger = useRef()
+  const [user, setUser] = useState({})
+  const isStaff = user.is_staff
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(data => setUser(data))
+  },
+    [])
+
 
   const showMobileNavbar = () => {
     hamburger.current.classList.toggle('is-active')
@@ -43,9 +53,13 @@ export const NavBar = ({ token, setToken }) => {
                 <div className="navbar-item">
                   <Link to="/tags" className="navbar-item">Tag Manager</Link>
                 </div>
-                <div className="navbar-item">
-                  <Link to="/users" className="navbar-item">Users</Link>
-                </div>
+                {
+                  isStaff ?
+                    <div className="navbar-item">
+                      <Link to="/users" className="navbar-item">Users</Link>
+                    </div>
+                    : ""
+                }
                 <div className="navbar-item">
                   <Link to="/newPost" className="navbar-item">New Post</Link>
                 </div>
