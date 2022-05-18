@@ -7,7 +7,7 @@ import { getAllUsers } from "./UserManager"
 
 // function that generates list of users
 // invokes User function from User.js for each user
-export const UserList = () => {
+export const UserList = ({ refreshState }) => {
     // define needed state variables
     // users, setUsers = useState()
     const [users, setUsers] = useState([])
@@ -36,11 +36,12 @@ export const UserList = () => {
             <div>Last Name</div>
             <div>Email</div>
             <div>Type</div>
+            <div>Active</div>
         </div>
         {
             sortedUsers.map(user => {
                 return <div key={`user-${user.id}`}>
-                    <User user={user} listView={true} />
+                    <User user={user} listView={true} setUsers={setUsers} isCheckbox={true}/>
                 </div>
             })
         }
