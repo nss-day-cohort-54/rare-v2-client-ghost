@@ -5,7 +5,7 @@ import { ButtonControls } from "../buttonControls/ButtonControls"
 import { CommentList } from "../comments/CommentsList"
 import "./Post.css"
 // function that renders a single post
-export const Post = ({ listView, cardView, post, currentUser }) => {
+export const Post = ({ listView, cardView, post, currentUser, setRefreshState, refreshState }) => {
 
     const [showComments, setShowComments] = useState(false)
   
@@ -95,7 +95,7 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                             </div>
                             {
                                 showComments
-                                    ? <CommentList id={post.id} />
+                                    ? <CommentList id={post.id} setRefreshState={setRefreshState} refreshState={refreshState}/>
                                     : 
                                     <>
                                     <div>{post.content}</div>

@@ -4,7 +4,7 @@ import { Post } from "./Post"
 import { getSinglePost } from "./PostManager"
 
 
-export const SinglePost = () => {
+export const SinglePost = ({setRefreshState, refreshState}) => {
     const [post, setPost] = useState({})
     const { postId } = useParams()
 
@@ -21,7 +21,7 @@ export const SinglePost = () => {
     return <>
     {
         post.title
-        ? <Post listView={false} cardView={false} post={post} />
+        ? <Post listView={false} cardView={false} post={post} setRefreshState={setRefreshState} refreshState={refreshState}/>
         : "loading"
     }
     </>
