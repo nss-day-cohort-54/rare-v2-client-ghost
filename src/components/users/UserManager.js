@@ -30,7 +30,7 @@ export const getCurrentUser = () => {
 }
 
 export const getSingleUser = (id) => {
-    return fetch(`${Settings.API}/users/${id}`, {
+    return fetch(`${Settings.API}/authors/${id}`, {
         headers: {
             "Authorization": `Token ${localStorage.getItem("token")}`
         }
