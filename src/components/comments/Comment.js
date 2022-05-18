@@ -16,12 +16,13 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments, ref
     // takes parameter of comment's id
     // calls deleteComment from CommentManager
     // refresh list
+    
     const removeComment = (commentId) => {
         deleteComment(commentId)
             .then(() => getComments(postId))
     }
 
-    return <div className="comment" >
+    return <div className="comment" key={`comment--${commentObject.id}`}>
 
 
         {/* 
@@ -43,7 +44,7 @@ export const Comment = ({ postId, commentObject, currentAuthor, getComments, ref
                     <ButtonControls
                         isComment={true}
                         postId={postId}
-                        commentId={commentObject.id}
+                        id={commentObject.id}
                         getComments={getComments}
                         setRefreshState={setRefreshState} />
                 </div>

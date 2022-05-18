@@ -1,42 +1,19 @@
 // imports
 // addComment from CommentManager
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useHistory } from "react-router-dom"
-import { useParams } from "react-router-dom"
-import { addComment, editComment, getCommentsByPostId, getComments } from "./CommentManager"
+import { addComment } from "./CommentManager"
 
 // export function that handles comment form entry
-export const CommentForm = ({ postId, getComments }) => {
+export const CommentForm = ({ postId, getComments, commentId }) => {
     // declare state variable for comment to add
     const [newComment, setComment] = useState("")
     const [subject, setSubject] = useState("")
-    const {postId, commentId} = useParams()
-    const history = useHistory()
-    
-    // function to handle comment submission
-    const submitComment = () => {
-        if(newComment.length > 0) {
 
-            const copy = {}
-            // gets comment content from state
-            copy.content = newComment
-            copy.subject = subject
-            // adds postId
-            copy.post_id = postId
-            
-            // sends to database 
-            addComment(copy)
-            .then(() => setComment(""))
-            .then(() => setSubject(""))
-            // refresh comment list
-            .then(() => getComments(postId))
-        } else {
-            window.alert("Please fill out your comment before submitting.")
-        }
-    }
+    const history = useHistory()
 
     const editMode = commentId ? true : false
-    
+
 
     useEffect(() => {
         if (editMode) {
@@ -44,7 +21,37 @@ export const CommentForm = ({ postId, getComments }) => {
                 setComment(res.content)
             })
         }
-    },[])
+    }, [])
+
+    // function to handle comment submission
+    const submitComment = () => {
+        if (newComment.length > 0) {
+
+            const copy = {}
+            // gets comment content from state
+            copy.content = newComment
+            copy.subject = subject
+            // adds postId
+            copy.post_id = postId
+
+            // sends to database 
+            addComment(copy)
+                .then(() => setComment(""))
+                .then(() => setSubject(""))
+                // refresh comment list
+                .then(() => getComments(postId))
+        } else {
+            window.alert("Please fill out your comment before submitting.")
+            if (editMode) {
+                copy.id = commentId
+                updateComment(copy)
+                    .then(() => history.push(`/posts/single/${postId}`))
+            } else {
+                addComment(copy)
+                    .then(() => history.push(`/posts/single/${postId}`))
+            }
+        }
+    }
 
     return <>
         {/* 
@@ -54,12 +61,12 @@ export const CommentForm = ({ postId, getComments }) => {
         <b>Create a Comment</b>
         <label htmlFor="subject">Subject:</label>
         <input id="subject" name="subject"
-                    onChange={(e) => setSubject(e.target.value)}
-                    value={subject}/>
+            onChange={(e) => setSubject(e.target.value)}
+            value={subject} />
         <label htmlFor="content">Comment:</label>
         <textarea id="content" name="content"
-                    onChange={(e) => setComment(e.target.value)}
-                    value={newComment}>
+            onChange={(e) => setComment(e.target.value)}
+            value={newComment}>
         </textarea>
         <button className="commentSubmit" onClick={() => submitComment()}>
             Submit Comment

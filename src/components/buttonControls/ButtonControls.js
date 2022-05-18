@@ -25,6 +25,7 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
 
       <div>
         <button
+          
           onClick={
             (e) => {
               e.preventDefault()
@@ -59,7 +60,8 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
                       setRefreshState(true)
                     })
               } else if (isComment) {
-                deleteComment(commentId)
+                
+                deleteComment(id)
                   .then(
                     () => {
                       const buttonTarget = document.querySelector(`#anything-${id}`)
