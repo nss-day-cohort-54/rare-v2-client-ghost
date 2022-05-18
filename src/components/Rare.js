@@ -4,9 +4,15 @@ import { ApplicationViews } from "./ApplicationViews"
 import { NavBar } from "./nav/NavBar"
 import { Login } from "./auth/Login"
 import { Register } from "./auth/Register"
+import { UserProvider } from "../UserContext"
 
 export const Rare = () => {
-  const [token, setTokenState] = useState(localStorage.getItem('token'))
+  const [token, setTokenState] = useState()
+
+    //state to refresh state when new object is submitted
+    const [refreshState, setRefreshState] = useState(false)
+
+  
 
   const setToken = (newToken) => {
     localStorage.setItem('token', newToken)
@@ -18,20 +24,22 @@ export const Rare = () => {
       token
         ?
         <Route>
-          <NavBar token={token} setToken={setToken} />
-          <ApplicationViews />
+          <UserProvider>
+            <NavBar token={token} setToken={setToken} setTokenState={setTokenState} setRefreshState={setRefreshState} refreshState={refreshState} />
+            <ApplicationViews setRefreshState={setRefreshState} refreshState={refreshState} />
+          </UserProvider>
         </Route>
         :
         <Redirect to="/login" />
     }
 
     <Route exact path="/login" >
-      <NavBar token={token} setToken={setToken} />
+      <NavBar token={token} setToken={setToken}  setRefreshState={setRefreshState} refreshState={refreshState}/>
       <Login token={token} setToken={setToken} />
     </Route>
 
     <Route path="/register" exact>
-      <NavBar token={token} setToken={setToken} />
+      <NavBar token={token} setToken={setToken} setRefreshState={setRefreshState} refreshState={refreshState}/>
       <Register token={token} setToken={setToken} />
     </Route>
 

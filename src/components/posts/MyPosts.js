@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react"
-import { getCurrentUser } from "../users/UserManager"
+import { useState, useEffect, useContext } from "react"
+
 import { Post } from "./Post"
 import { getUserPosts } from "./PostManager"
+import { UserContext } from "../../UserContext";
 
-export const MyPosts = ( { refreshState, setRefreshState, currentUser }) => {
+export const MyPosts = ( { refreshState, setRefreshState }) => {
+    const {currentUser} = useContext(UserContext)
     const [posts, setPosts] = useState([])
 
 

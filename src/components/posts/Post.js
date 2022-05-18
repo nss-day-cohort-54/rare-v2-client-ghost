@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useHistory } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { ButtonControls } from "../buttonControls/ButtonControls"
 import { CommentList } from "../comments/CommentsList"
 import "./Post.css"
+import { UserContext } from "../../UserContext";
+import { updatePost } from "./PostManager"
 // function that renders a single post
-export const Post = ({ listView, cardView, post, currentUser }) => {
+export const Post = ({ listView, cardView, post }) => {
+    const {currentUser} = useContext(UserContext)
+    const history = useHistory()
 
     const [showComments, setShowComments] = useState(false)
   
@@ -27,7 +31,7 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                                 {post.title}
                             </Link>
                         </div>
-                        <div>{post.publication_date}</div>
+                        <div>{formatDate(post.publication_date)}</div>
                     </div>
                     <div className="cardImage">
                         <img src={`${post.image_url || "https://picsum.photos/300/100"}`} />
@@ -46,6 +50,10 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                         </div>
                     </div>
                     <div>Category: {post.category.label}</div>
+                    {post.approved === true ?
+                    <div>Approval Status: Approved </div>
+                    :
+                    <div>Approval Status: Waiting to be reviewed by an admin</div>}
                 </div>
                 : listView
                     ? <div key={`post--${post.id}`} className="singlePost">
@@ -61,7 +69,7 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                             }
                         </div>
                         <div>{post.author?.user.first_name} {post.author?.user.last_name}</div>
-                        <div>{post.publication_date}</div>
+                        <div>{formatDate(post.publication_date)}</div>
                         <div>{post.category.label}</div>
                         {/* <div>{post.tags.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div> */}
                     </div>
@@ -115,7 +123,17 @@ export const Post = ({ listView, cardView, post, currentUser }) => {
                                 showComments
                                     ? <button onClick={() => { setShowComments(false) }}>Show Post</button>
                                     : <button onClick={() => setShowComments(true)}>View Comments</button>
-                            }
+                            }<br></br>
+                            {currentUser.is_staff === true ?
+                            <button onClick={() => {
+                                const copy = {...post}
+                                copy.approved = true
+                                copy.category = post.category.id
+                                copy.tags = post.tags.map(tag => tag.id)
+                                updatePost(copy)
+                                history.push('/posts/all')
+                            }}>Approve Post?</button>
+                            :""}
                         </div>
                     </div>
         }

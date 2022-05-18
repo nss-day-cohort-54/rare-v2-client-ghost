@@ -1,27 +1,21 @@
 import { getAllPosts, searchPostCategories, searchPostTitles, getPostsByTag } from "./PostManager"
 import { getUserPosts } from "./PostManager"
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Post } from "./Post";
 import { getAllUsers } from "../users/UserManager"
 import { getAllTags } from "../tags/TagManager";
 import { getAllCategories } from "../categories/CategoryManager";
+import { UserContext } from "../../UserContext";
 
 
-export const AllPosts = ({ currentUser }) => {
+export const AllPosts = () => {
+    const {currentUser} = useContext(UserContext)
 
     const [posts, setPosts] = useState([])
-    const [user, setUser] = useState({})
     const [tags, setTags] = useState([])
     const [categories, setCategories] = useState([])
     const [filter, setFilterType] = useState({ type: "all", value: "" })
 
-
-    useEffect(
-        () => {
-            setUser(currentUser)
-        },
-        [currentUser]
-    )
 
     useEffect(
         () => {
@@ -46,24 +40,30 @@ export const AllPosts = ({ currentUser }) => {
                 .then((posts) => {
                     setPosts(posts)
                 })
+                .then(() => setRefreshState(false))
         } else if (filter.type === "title") {
             searchPostTitles(filter.value)
                 .then(setPosts)
+                .then(() => setRefreshState(false))
         } else if (filter.type === "category") {
             searchPostCategories(filter.value)
                 .then(setPosts)
+                .then(() => setRefreshState(false))
         }
         // run category filter fetch with value
         else if (filter.type === "user") {
             getUserPosts(filter.value)
                 .then(setPosts)
+                .then(() => setRefreshState(false))
             // run user filter fetch with value
         } else if (filter.type === "tag") {
             getPostsByTag(filter.value)
                 .then(setPosts)
+                .then(() => setRefreshState(false))
             // run tag filter fetch with value
         }
-    }, [filter])
+        
+    }, [filter, currentUser])
 
     // useEffect that updates posts, [searchButton]
     return <>
@@ -193,8 +193,11 @@ export const AllPosts = ({ currentUser }) => {
                 })
                 : "No posts"
         }
-        {user.is_staff === true ?
+        {/* if currentUser is staff */}
+        {currentUser.is_staff === true ?
+            
             <>
+            
                 <h3>Posts to be approved:</h3>
                 {posts.length > 0 ?
                     posts.map((post) => {

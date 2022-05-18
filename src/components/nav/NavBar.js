@@ -4,7 +4,7 @@ import { getCurrentUser } from "../users/UserManager"
 import "./NavBar.css"
 import Logo from "./rare.jpeg"
 
-export const NavBar = ({ token, setToken }) => {
+export const NavBar = ({ token, setToken, refreshState, setRefreshState, setTokenState }) => {
   const history = useHistory()
   const navbar = useRef()
   const hamburger = useRef()
@@ -77,6 +77,8 @@ export const NavBar = ({ token, setToken }) => {
                   ?
                   <button className="button is-outlined" onClick={() => {
                     localStorage.removeItem('token')
+                    setTokenState(false)
+                    setRefreshState(true)
                     history.push('/login')
                   }}>Logout</button>
                   :

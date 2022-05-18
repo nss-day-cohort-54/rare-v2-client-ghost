@@ -1,15 +1,16 @@
 // imports React, useEffect, useSate, useHistory, sendPost, fetchTags
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { getAllCategories } from "../categories/CategoryManager";
 import { addTag, removeTag } from "../tags/TagManager";
 import { createPost, getSinglePost, updatePost } from "./PostManager";
+import { UserContext } from "../../UserContext";
 
 
-
-export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }) => {
+export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
+    const {currentUser} = useContext(UserContext)
 
     const [posts, setPosts] = useState([])
     const [categories, setCategories] = useState([])
@@ -75,7 +76,8 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
                 image_url: post.image_url,
                 content: post.content,
                 approved: post.approved,
-                user: currentUser.id
+                user: currentUser.id,
+                tags: selectedTags
             })
                 .then(() => history.push("/posts/all"))
 
