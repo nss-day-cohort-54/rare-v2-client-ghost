@@ -16,7 +16,7 @@ import { getCommentsByPostId } from "./CommentManager"
 
 // From Individual Post Component
 // <CommentList postId={id} /> - displayed on a boolean
-export const CommentList = () => {
+export const CommentList = ({setRefreshState, refreshState}) => {
     // declare state variable for comments array
     // const [comments, setComments] = useState([])
     const [comments, setComments] = useState([])
@@ -29,9 +29,11 @@ export const CommentList = () => {
         () => {
             if (postId) {
                 getComments(postId)
+
             }
+            
         },
-        [postId]
+        [postId, refreshState]
     )
     useEffect(
         () => {
@@ -56,6 +58,9 @@ export const CommentList = () => {
     const getComments = (postId) => {
         getCommentsByPostId(postId)
             .then(setComments)
+            .then(() => {
+                setRefreshState(false)
+            })
     }
 
     // any other functions?
@@ -74,7 +79,7 @@ export const CommentList = () => {
             comments.map(comment => {
                 let currentAuthor = comment.author?.id === userId
                 return <div key={`comment--${comment.id}`}>
-                    <Comment postId={postId} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} />
+                    <Comment postId={postId} commentObject={comment} currentAuthor={currentAuthor} getComments={getComments} setRefreshState={setRefreshState}/>
                 </div>
             })
         }

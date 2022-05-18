@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { getSubsForFollower } from "../users/SubManager"
 import { Post } from "./Post"
 
-export const SubbedPosts = () => {
+export const SubbedPosts = ({setRefreshState, refreshState}) => {
     const [subs, setSubs] = useState([{posts: []}])
     const [posts, setPosts] = useState([])
     const currentUser = localStorage.getItem("token")
@@ -35,7 +35,7 @@ export const SubbedPosts = () => {
         {
             posts.map(post => {
                 return <div key={`post--${post.id}`}>
-                    <Post listView={true} cardView={true} post={post} />
+                    <Post listView={true} cardView={true} post={post} setRefreshState={setRefreshState} refreshState={refreshState}/>
                     </div>
             })
         }

@@ -7,7 +7,7 @@ import { getAllTags } from "../tags/TagManager";
 import { getAllCategories } from "../categories/CategoryManager";
 
 
-export const AllPosts = ( {currentUser} ) => {
+export const AllPosts = ( {currentUser, setRefreshState, refreshState} ) => {
 
     const [posts, setPosts] = useState([])
     const [users, setUsers] = useState([])
@@ -185,7 +185,7 @@ export const AllPosts = ( {currentUser} ) => {
             posts.length > 0
                 ? posts.map((post) => {
                     return <div key={post.id} className="posts">
-                        <Post listView={true} cardView={false} post={post} currentUser={currentUser} />
+                        <Post listView={true} cardView={false} post={post} currentUser={currentUser} setRefreshState={setRefreshState} refreshState={refreshState}/>
                     </div>
                     // needs author name and category, publication date, content 
                 })

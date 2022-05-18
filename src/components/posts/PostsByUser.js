@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { getUserPosts } from "./PostManager"
 import { Post } from "./Post"
 
-export const PostsByUser = () => {
+export const PostsByUser = ({setRefreshState, refreshState}) => {
     const { userId } = useParams()
     const [posts, setPosts] = useState([])
 
@@ -20,7 +20,7 @@ export const PostsByUser = () => {
     return <>
         {
             posts.map(post => {
-                return <Post listView={true} cardView={true} post={post} />
+                return <Post listView={true} cardView={true} post={post} setRefreshState={setRefreshState} refreshState={refreshState}/>
             })
         }
     
