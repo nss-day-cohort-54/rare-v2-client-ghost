@@ -8,7 +8,7 @@ import { getAllCategories } from "../categories/CategoryManager";
 import { UserContext } from "../../UserContext";
 
 
-export const AllPosts = () => {
+export const AllPosts = ({setRefreshState, refreshState}) => {
     const {currentUser} = useContext(UserContext)
 
     const [posts, setPosts] = useState([])

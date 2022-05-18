@@ -6,7 +6,7 @@ import { deleteTag, sendTagEdit } from "../tags/TagManager"
 import { useEffect, useState } from "react"
 import { deleteCategory, editCategory } from "../categories/CategoryManager"
 
-export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, setRefreshState, tag, isCategories, category }) => {
+export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, setRefreshState, tag, isCategories, category, isComment }) => {
   const history = useHistory()
   const [singleTag, setSingleTag] = useState()
   useEffect(() => {
@@ -58,19 +58,18 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
                     () => {
                       setRefreshState(true)
                     })
-              } else {
+              } else if (isComment) {
                 deleteComment(commentId)
-                  .then(
-                    () => {
-                      getComments(id)
-                    }
-                  )
                   .then(
                     () => {
                       const buttonTarget = document.querySelector(`#anything-${id}`)
                       buttonTarget.close()
                     }
                   )
+                  .then(
+                    () => {
+                      setRefreshState(true)
+                    })
               }
             }
           }

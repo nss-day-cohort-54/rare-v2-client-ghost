@@ -20,7 +20,7 @@ export const MyPosts = ( { refreshState, setRefreshState }) => {
         {
             posts.map(post => {
                 return <div key={`post-${post.id}`}>
-                    <Post listView={true} cardView={true} post={post} currentUser={currentUser} />
+                    <Post listView={true} cardView={true} post={post} currentUser={currentUser} setRefreshState={setRefreshState} refreshState={refreshState}/>
                 </div> 
             })
         }

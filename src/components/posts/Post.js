@@ -68,7 +68,7 @@ export const Post = ({ listView, cardView, post }) => {
                                     : null
                             }
                         </div>
-                        <div>{post.author?.user.first_name} {post.author?.user.last_name}</div>
+                        <div><Link to={`/users/${post.author?.id}`}>{post.author?.user.first_name} {post.author?.user.last_name}</Link></div>
                         <div>{formatDate(post.publication_date)}</div>
                         <div>{post.category.label}</div>
                         {/* <div>{post.tags.map(tag => <div key={`posttag${post.id}${tag.id}`}>{tag.label}</div>)}</div> */}
@@ -103,7 +103,7 @@ export const Post = ({ listView, cardView, post }) => {
                             </div>
                             {
                                 showComments
-                                    ? <CommentList id={post.id} />
+                                    ? <CommentList id={post.id} setRefreshState={setRefreshState} refreshState={refreshState}/>
                                     : 
                                     <>
                                     <div>{post.content}</div>

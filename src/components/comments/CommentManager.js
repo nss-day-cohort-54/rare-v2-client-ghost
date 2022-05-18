@@ -4,7 +4,7 @@ import { Settings } from "../utils/Settings"
 // getCommentsByPostId
 export const getCommentsByPostId = (postId) => {
     return fetch(`${Settings.API}/comments?post=${postId}`, {
-        headers:{
+        headers: {
             "Authorization": `Token ${localStorage.getItem("token")}`
         }
     }).then(response => response.json())
@@ -12,11 +12,12 @@ export const getCommentsByPostId = (postId) => {
 
 // deleteComment
 export const deleteComment = (commentId) => {
-    return fetchIt(`${Settings.API}/comments/${commentId}`, {
-        headers:{
+    return fetch(`${Settings.API}/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
             "Authorization": `Token ${localStorage.getItem("token")}`
         }
-    }, "DELETE")
+    })
 }
 
 // addComment
@@ -27,6 +28,6 @@ export const addComment = (newComment) => {
             "Content-Type": "application/json",
             "Authorization": `Token ${localStorage.getItem("token")}`
         }, body: JSON.stringify(newComment)
-        })
+    })
         .then(res => res.json())
-    }
+}
