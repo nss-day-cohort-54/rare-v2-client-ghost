@@ -21,11 +21,11 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
     const [userPosts, setUserPosts] = useState([])
     const [postCount, setPostCount] = useState(0)
     const { userId } = useParams()
-    
+
 
     useEffect(
         () => {
-            if(!listView) {
+            if (!listView) {
                 getSingleUser(userId)
                     .then(userData => setViewUser(userData))
             }
@@ -34,55 +34,59 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
 
     useEffect(
         () => {
-            if(viewUser) {
+            if (viewUser) {
                 getUserPosts(userId)
-                .then(data => setUserPosts(data))
+                    .then(data => setUserPosts(data))
                 let count = userPosts.length
                 setPostCount(count)
             }
         }, [viewUser]
     )
-        
+
     // does subscribe button need an onclick?
-        // yes
-        // if subbed - onclick calls delete sub function
-        // if not subbed - onclick calls add sub function
+    // yes
+    // if subbed - onclick calls delete sub function
+    // if not subbed - onclick calls add sub function
 
     return <>
-        {listView 
-            ? <div className="singleUser">
-                <div>
-                    <Link to={`/users/${user.user.id}`}>
-                    {user.user.username}
-                    </Link>
-                </div>
-                <div>{user.user.first_name}</div>
-                <div>{user.user.last_name}</div>
-                <div>{user.user.email}</div>
-                <div>{user.user.is_staff ? "Admin" : "User"}</div>
-                <div>
-                    <UserButtonControls user={user} id={user.id} setRefreshState={setRefreshState} isCheckbox={true} setUsers={setUsers}/>
-                </div>
-            </div> 
-            : viewUser
-                ? <div>
-                    <div>Picture: <img src={`${viewUser.user.profileImageUrl || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} /></div>
-                    <div>Name: {viewUser.user.first_name} {viewUser.user.last_name}</div>
-                    <div>Username: {viewUser.user.username}</div>
-                    <div>Email: {viewUser.user.email}</div>
-                    <div>Creation Date: {viewUser.user.date_joined}</div>
-                    <div>Profile Type: {viewUser.user.is_staff ? "Admin" : "Author"}</div>
-                    <div>
-                        <Link to={`/posts/user/${viewUser.user.id}`}>
-                        See Articles - Count: {postCount}
+        {listView
+            ? <tbody> 
+                <tr className="singleUser">
+                    <td>
+                        <Link to={`/users/${user.user.id}`}>
+                            {user.user.username}
                         </Link>
-                    </div>
-                    <div>
-                        <SubForm author={viewUser} />
-                    </div>
-                </div>
+                    </td>
+                    <td>{user.user.first_name}</td>
+                    <td>{user.user.last_name}</td>
+                    <td>{user.user.email}</td>
+                    <td>{user.user.is_staff ? "Admin" : "User"}</td>
+                    <td>
+                        <UserButtonControls user={user} id={user.id} setRefreshState={setRefreshState} isCheckbox={true} setUsers={setUsers} />
+                    </td>
+                </tr>
+            </tbody>
+            : viewUser
+                ? <tbody> 
+                    <tr>
+                        <td>Picture: <img src={`${viewUser.user.profileImageUrl || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} /></td>
+                        <td>Name: {viewUser.user.first_name} {viewUser.user.last_name}</td>
+                        <td>Username: {viewUser.user.username}</td>
+                        <td className="email-row" >Email: {viewUser.user.email}</td>
+                        <td>Creation Date: {viewUser.user.date_joined}</td>
+                        <td>Profile Type: {viewUser.user.is_staff ? "Admin" : "Author"}</td>
+                        <td>
+                            <Link to={`/posts/user/${viewUser.user.id}`}>
+                                See Articles - Count: {postCount}
+                            </Link>
+                        </td>
+                        <td>
+                            <SubForm author={viewUser} />
+                        </td>
+                    </tr>
+                </tbody>
                 : null
         }
-    
+
     </>
 }
