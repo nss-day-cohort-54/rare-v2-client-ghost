@@ -10,7 +10,7 @@ import { UserContext } from "../../UserContext";
 
 export const AllPosts = ({setRefreshState, refreshState}) => {
     const {currentUser} = useContext(UserContext)
-
+    const [refreshPosts, setRefreshPosts] = useState(false)
     const [posts, setPosts] = useState([])
     const [tags, setTags] = useState([])
     const [categories, setCategories] = useState([])
@@ -33,37 +33,41 @@ export const AllPosts = ({setRefreshState, refreshState}) => {
         []
     )
 
+    useEffect(() => {
+        setRefreshPosts(false)
+    }, [posts])
+
 
     useEffect(() => {
         if (filter.type === "all") {
             getAllPosts()
                 .then((posts) => {
                     setPosts(posts)
-                    .then(() => setRefreshState(true))
+
                 })
+            } else if (filter.type === "category") {
+                searchPostCategories(filter.value)
+                    .then((data) => setPosts(data))
+
         // } else if (filter.type === "title") {
         //     searchPostTitles(filter.value)
         //         .then(setPosts)
-        //         .then(() => setRefreshState(true))
-        // } else if (filter.type === "category") {
-        //     searchPostCategories(filter.value)
-        //         .then(setPosts)
-        //         .then(() => setRefreshState(true))
+        //    
         // }
         // // run category filter fetch with value
         // else if (filter.type === "user") {
         //     getUserPosts(filter.value)
         //         .then(setPosts)
-        //         .then(() => setRefreshState(true))
+        //    
         //     // run user filter fetch with value
         // } else if (filter.type === "tag") {
         //     getPostsByTag(filter.value)
         //         .then(setPosts)
-        //         .then(() => setRefreshState(true))
+        //    
         //     // run tag filter fetch with value
         }
         
-    }, [refreshState])
+    }, [refreshPosts])
 
     // useEffect that updates posts, [searchButton]
     return <>
@@ -99,8 +103,9 @@ export const AllPosts = ({setRefreshState, refreshState}) => {
                     if (e.target.value != "0") {
                         let copy = JSON.parse(JSON.stringify(filter))
                         copy.type = "category"
-                        copy.value = e.target.value
+                        copy.value = parseInt(e.target.value)
                         setFilterType(copy)
+                        setRefreshPosts(true)
                     }
                 }}
             >

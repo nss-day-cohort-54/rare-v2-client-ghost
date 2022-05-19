@@ -10,10 +10,15 @@ export const MyPosts = ( { refreshState, setRefreshState }) => {
 
 
     useEffect(() => {
-        getUserPosts(currentUser?.id)
+        if (currentUser) {
+
+            
+            getUserPosts(currentUser?.id)
             .then((data) => setPosts(data))
             .then(() => setRefreshState(true))
-    }, [currentUser, refreshState])
+        }
+        
+    }, [currentUser])
 
 
     return <>
