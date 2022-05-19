@@ -40,6 +40,7 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
             copy.image_url = originalPost.image_url
             copy.content = originalPost.content
             copy.approved = originalPost.approved
+            // copy.user = originalPost.author.id
             setPost(copy)
         }
 
@@ -76,7 +77,7 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
                 image_url: post.image_url,
                 content: post.content,
                 approved: post.approved,
-                user: currentUser.id,
+                user: post.user,
                 tags: selectedTags
             })
                 .then(() => history.push("/posts/all"))

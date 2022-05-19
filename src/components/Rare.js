@@ -7,7 +7,7 @@ import { Register } from "./auth/Register"
 import { UserProvider } from "../UserContext"
 
 export const Rare = () => {
-  const [token, setTokenState] = useState()
+  const [token, setTokenState] = useState(localStorage.getItem('token'))
 
     //state to refresh state when new object is submitted
     const [refreshState, setRefreshState] = useState(false)
@@ -34,12 +34,12 @@ export const Rare = () => {
     }
 
     <Route exact path="/login" >
-      <NavBar token={token} setToken={setToken}  setRefreshState={setRefreshState} refreshState={refreshState}/>
+      <NavBar token={token} setToken={setToken} />
       <Login token={token} setToken={setToken} />
     </Route>
 
     <Route path="/register" exact>
-      <NavBar token={token} setToken={setToken} setRefreshState={setRefreshState} refreshState={refreshState}/>
+      <NavBar token={token} setToken={setToken}/>
       <Register token={token} setToken={setToken} />
     </Route>
 
