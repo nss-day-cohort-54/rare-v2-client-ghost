@@ -1,52 +1,138 @@
 // imports
 // addComment from CommentManager
-import { useState } from "react"
-import { addComment } from "./CommentManager"
+import { useState, useEffect, useContext } from "react"
+import { Link } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import { useHistory } from "react-router-dom"
+import { CommentStateContext, CommentStateProvider } from "../../CommentStateContext"
+import { addComment, getCommentsByPostId, getCommentById, editComment, getSingleComment } from "./CommentManager"
 
 // export function that handles comment form entry
-export const CommentForm = ({ postId, getComments }) => {
+export const CommentForm = ({ setRefreshState, refreshState }) => {
     // declare state variable for comment to add
-    const [newComment, setComment] = useState("")
+    const {commentState, setCommentState} = useContext(CommentStateContext)
     const [subject, setSubject] = useState("")
-    
+    const [originalComment, setOriginalComment] = useState({})
+    const { postId, commentId } = useParams()
+
+    const history = useHistory()
+
+    const editMode = commentId ? true : false
+
+    const [newComment, setComment] = useState({
+        content: "",
+        subject: "",
+        created_on: Date.now()
+
+    })
+
+    useEffect(() => {
+        if (editMode) {
+            getSingleComment(commentId).then((res) => {
+                const copy = {}
+                copy.id = originalComment.id
+                copy.content = originalComment.content
+                copy.subject = originalComment.subject
+                copy.created_on = originalComment.created_on
+                setComment(copy)
+            })
+        }
+    }, [originalComment])
+
+    useEffect(() => {
+        if (commentId) {
+            getSingleComment(parseInt(commentId))
+                .then(newComment => {
+                    setOriginalComment(newComment)
+                })
+        }
+    }, [refreshState])
+
+    useEffect(() => {
+        
+        const newComment = {
+            content: "",
+            subject: "",
+            created_on: Date.now()
+        }
+        setComment(newComment)
+    }, [commentState])
+
+    const handleInputChange = (event) => {
+        const updatedComment = { ...newComment }
+        updatedComment[event.target.id] = event.target.value;
+        setComment(updatedComment)
+    }
+
     // function to handle comment submission
     const submitComment = () => {
-        if(newComment.length > 0) {
-
-            const copy = {}
-            // gets comment content from state
-            copy.content = newComment
-            copy.subject = subject
-            // adds postId
-            copy.post_id = postId
-            
-            // sends to database 
-            addComment(copy)
-            .then(() => setComment(""))
-            .then(() => setSubject(""))
-            // refresh comment list
-            .then(() => getComments(postId))
-        } else {
+        if (newComment.length === 0) {
             window.alert("Please fill out your comment before submitting.")
+        } else {
+            if (editMode) {
+                editComment({
+                    id: newComment.id,
+                    content: newComment.content,
+                    subject: newComment.subject,
+                    created_on: newComment.created_on,
+                    post: postId
+                })
+                    .then(() => history.push(`/posts/single/${postId}`))
+            } else {
+                addComment({
+                    id: newComment.id,
+                    content: newComment.content,
+                    subject: newComment.subject,
+                    created_on: newComment.created_on,
+                    post_id: postId,
+                    author: parseInt(localStorage.getItem("token"))
+                })
+            }
         }
     }
+
+
     return <>
         {/* 
             textarea form input
             button to submit comment
         */}
-        <b>Create a Comment</b>
-        <label htmlFor="subject">Subject:</label>
-        <input id="subject" name="subject"
-                    onChange={(e) => setSubject(e.target.value)}
-                    value={subject}/>
-        <label htmlFor="content">Comment:</label>
-        <textarea id="content" name="content"
-                    onChange={(e) => setComment(e.target.value)}
-                    value={newComment}>
-        </textarea>
-        <button className="commentSubmit" onClick={() => submitComment()}>
-            Submit Comment
-        </button>
+        <form className="commentForm">
+            <h2 className="commentForm__title"><b>{editMode ? "Edit Post" : "Add Post"}</b></h2>
+            <fieldset>
+                <div className="form_group">
+                    <label htmlFor="subject"> Subject: </label>
+                    <input type="text" id="subject" name="subject" required autoFocus className="form-control"
+                        placeholder="Comment Subject"
+                        value={newComment.subject}
+                        onChange={handleInputChange}
+                    />
+                </div>
+            </fieldset>
+            <fieldset>
+                <div className="form_group">
+                    <label htmlFor="content"> Content: </label>
+                    <input type="text" id="content" name="content" required autoFocus className="form-control"
+                        placeholder="Comment Content"
+                        value={newComment.content}
+                        onChange={handleInputChange}
+                    />
+                </div>
+            </fieldset>
+            <button type="submitComment"
+                onClick={evt => {
+                    
+                    evt.preventDefault()
+                    submitComment()
+                    setCommentState(true)
+                    
+                    
+                }}
+                className="bt btn-primary">
+                {editMode ? "Save Changes" : "Create Comment"}
+            </button>
+            <Link to="/posts/single/${postId}" className="cancel-btn">Cancel</Link>
+        </form>
     </>
-}
+
+}    

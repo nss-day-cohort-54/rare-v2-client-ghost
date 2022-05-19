@@ -31,3 +31,24 @@ export const addComment = (newComment) => {
     })
         .then(res => res.json())
 }
+
+// editComment
+export const editComment = (comment) => {
+    return fetch(`${Settings.API}/comments/${comment.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify(comment)
+    })
+}
+
+// Get single comment
+export const getSingleComment = (commentId) => {
+    return fetch(`${Settings.API}/comments/${commentId}`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }
+    }).then(response => response.json())
+}

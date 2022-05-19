@@ -5,6 +5,7 @@ import { NavBar } from "./nav/NavBar"
 import { Login } from "./auth/Login"
 import { Register } from "./auth/Register"
 import { UserProvider } from "../UserContext"
+import { CommentStateProvider } from "../CommentStateContext"
 
 
 export const Rare = () => {
@@ -32,8 +33,12 @@ export const Rare = () => {
         ?
         <Route>
           <UserProvider>
+            
             <NavBar token={token} setToken={setToken} setTokenState={setTokenState} setRefreshState={setRefreshState} refreshState={refreshState} />
+            <CommentStateProvider>
             <ApplicationViews setRefreshState={setRefreshState} refreshState={refreshState} />
+            </CommentStateProvider>
+            
           </UserProvider>
         </Route>
         :

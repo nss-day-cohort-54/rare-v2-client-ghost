@@ -7,7 +7,7 @@ import "./Post.css"
 import { UserContext } from "../../UserContext";
 import { updatePost } from "./PostManager"
 // function that renders a single post
-export const Post = ({ listView, cardView, post }) => {
+export const Post = ({ listView, cardView, post, refreshState, setRefreshState }) => {
     const {currentUser} = useContext(UserContext)
     const history = useHistory()
 

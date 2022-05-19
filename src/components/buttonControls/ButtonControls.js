@@ -3,11 +3,13 @@ import { deleteComment } from "../comments/CommentManager"
 import { deletePost } from "../posts/PostManager"
 import { useHistory } from "react-router-dom"
 import { deleteTag, sendTagEdit } from "../tags/TagManager"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { deleteCategory, editCategory } from "../categories/CategoryManager"
+import { CommentStateContext } from "../../CommentStateContext"
 
-export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, setRefreshState, tag, isCategories, category, isComment }) => {
+export const ButtonControls = ({ isPost, id, postId, commentId, isTags, setRefreshState, tag, isCategories, category, isComment }) => {
   const history = useHistory()
+  const {commentState, setCommentState} = useContext(CommentStateContext)
   const [singleTag, setSingleTag] = useState()
   useEffect(() => {
     setSingleTag(tag)
@@ -25,6 +27,7 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
 
       <div>
         <button
+          
           onClick={
             (e) => {
               e.preventDefault()
@@ -59,7 +62,8 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
                       setRefreshState(true)
                     })
               } else if (isComment) {
-                deleteComment(commentId)
+                
+                deleteComment(id)
                   .then(
                     () => {
                       const buttonTarget = document.querySelector(`#anything-${id}`)
@@ -68,7 +72,7 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
                   )
                   .then(
                     () => {
-                      setRefreshState(true)
+                      setCommentState(true)
                     })
               }
             }
@@ -115,8 +119,8 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
           editCategory(categoryEdit)
             .then(()=>setRefreshState(true))
         }
-      } else {
-        window.alert("Cannot edit comments")
+      } else if (isComment) {
+        history.push(`/posts/single/${postId}/createComment/${id}`)
       }
     }}>
       <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />
