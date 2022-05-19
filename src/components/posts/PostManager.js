@@ -72,6 +72,16 @@ export const getUserPosts = (userId) => {
     .then(res => res.json())
 };
 
+// get posts by category
+export const searchPostCategories = (categoryId) => {
+  return fetch(`${Settings.API}/posts?category=${categoryId}`, {
+    headers: {
+      "Authorization": `Token ${localStorage.getItem("token")}`
+    }
+  })
+    .then(res => res.json())
+};
+
 
 
 export const getPostsByTag = (id) => {
@@ -97,10 +107,5 @@ export const createPost = (post) => {
 
 export const searchPostTitles = titleString => {
   return fetch(`http://localhost:8088/posts?title=${titleString}`)
-    .then(res => res.json())
-};
-
-export const searchPostCategories = categoryId => {
-  return fetch(`http://localhost:8088/posts?category=${categoryId}`)
     .then(res => res.json())
 };

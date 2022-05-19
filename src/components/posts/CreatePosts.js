@@ -197,7 +197,7 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
                                             const tag = {}
                                             tag.tag_id=e.target.value
                                             removeTag(tag, originalPost.id)
-                                            setRefreshState(true)
+                                            .then(() => setRefreshState(true))
 
                                         }}/>
                                         <label htmlFor={tag.label}>{tag.label}</label>
@@ -207,7 +207,7 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
                                             const tag = {}
                                             tag.tag_id=e.target.value
                                             addTag(tag, originalPost.id)
-                                            setRefreshState(true)
+                                            .then(() => setRefreshState(true))
 
                                         }}/>
                                     

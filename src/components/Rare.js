@@ -14,7 +14,9 @@ export const Rare = () => {
     const [refreshState, setRefreshState] = useState(false)
 
     useEffect(() => {
-      setRefreshState(false)
+      
+        setRefreshState(false)
+     
     }, [refreshState])
 
   
