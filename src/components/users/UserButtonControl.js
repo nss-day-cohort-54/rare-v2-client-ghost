@@ -22,7 +22,7 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
                 isCheckbox && user.user.is_active ? <div>Are you sure you want to disable this user?</div>
                     : isCheckbox ? <div>Would you like to reinstate user?</div>
                         : isAdminCheckbox && user.user.is_staff ? <div>Do you wish to disable admin?</div>
-                            : <div>Would you like to reinstate user as admin?</div>
+                            : <div>Make user an admin?</div>
             }
 
             <div>
@@ -41,7 +41,7 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
                                 changeActive(userObject)
                                     .then(getAllUsers)
                                     .then(data => setUsers(data))
-                                const buttonTarget = document.querySelector(`#anything-${id}`)
+                                const buttonTarget = document.querySelector(`#${tag}${id}`)
                                 buttonTarget.close()
                             } else if (isAdminCheckbox) {
                                 const status = user.user.is_staff
@@ -54,7 +54,7 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
                                 changeActive(userObject)
                                     .then(getAllUsers)
                                     .then(data => setUsers(data))
-                                const buttonTarget = document.querySelector(`#anything-${id}`)
+                                const buttonTarget = document.querySelector(`#${tag}${id}`)
                                 buttonTarget.close()
                             }
                         }
@@ -64,7 +64,7 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
                     onClick={
                         (e) => {
                             e.preventDefault()
-                            const buttonTarget = document.querySelector(`#anything-${id}`)
+                            const buttonTarget = document.querySelector(`#${tag}${id}`)
                             buttonTarget.close()
                         }
                     }
@@ -79,7 +79,7 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
                 <input type="checkbox" id="is_staff"
                     name="is_staff" checked={user.user.is_staff} value={user.user.is_staff}
                     onChange={() => {
-                        const buttonTarget = document.querySelector(`#anything-${id}`)
+                        const buttonTarget = document.querySelector(`#admin-${id}`)
                         buttonTarget.showModal()
                     }} />
                 <label>Admin</label></div>
