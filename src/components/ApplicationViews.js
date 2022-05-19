@@ -21,8 +21,6 @@ export const ApplicationViews = ({refreshState, setRefreshState}) => {
   const [tags, setTags] = useState([])
 
 
-
-
   // use UseEffect to getAllTags and set the state of the tag array.
   useEffect(() => {
     getAllTags()

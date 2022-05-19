@@ -3,11 +3,13 @@ import { deleteComment } from "../comments/CommentManager"
 import { deletePost } from "../posts/PostManager"
 import { useHistory } from "react-router-dom"
 import { deleteTag, sendTagEdit } from "../tags/TagManager"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { deleteCategory, editCategory } from "../categories/CategoryManager"
+import { CommentStateContext } from "../../CommentStateContext"
 
-export const ButtonControls = ({ isPost, id, postId, commentId, getComments, isTags, setRefreshState, tag, isCategories, category, isComment }) => {
+export const ButtonControls = ({ isPost, id, postId, commentId, isTags, setRefreshState, tag, isCategories, category, isComment }) => {
   const history = useHistory()
+  const {commentState, setCommentState} = useContext(CommentStateContext)
   const [singleTag, setSingleTag] = useState()
   useEffect(() => {
     setSingleTag(tag)
@@ -70,7 +72,7 @@ export const ButtonControls = ({ isPost, id, postId, commentId, getComments, isT
                   )
                   .then(
                     () => {
-                      setRefreshState(true)
+                      setCommentState(true)
                     })
               }
             }

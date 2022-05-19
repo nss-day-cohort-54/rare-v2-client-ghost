@@ -1,15 +1,16 @@
 // imports
 // addComment from CommentManager
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { Link } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import { useHistory } from "react-router-dom"
+import { CommentStateContext, CommentStateProvider } from "../../CommentStateContext"
 import { addComment, getCommentsByPostId, getCommentById, editComment, getSingleComment } from "./CommentManager"
 
 // export function that handles comment form entry
 export const CommentForm = ({ setRefreshState, refreshState }) => {
     // declare state variable for comment to add
-
+    const {commentState, setCommentState} = useContext(CommentStateContext)
     const [subject, setSubject] = useState("")
     const [originalComment, setOriginalComment] = useState({})
     const { postId, commentId } = useParams()
@@ -47,6 +48,16 @@ export const CommentForm = ({ setRefreshState, refreshState }) => {
         }
     }, [refreshState])
 
+    useEffect(() => {
+        
+        const newComment = {
+            content: "",
+            subject: "",
+            created_on: Date.now()
+        }
+        setComment(newComment)
+    }, [commentState])
+
     const handleInputChange = (event) => {
         const updatedComment = { ...newComment }
         updatedComment[event.target.id] = event.target.value;
@@ -76,7 +87,6 @@ export const CommentForm = ({ setRefreshState, refreshState }) => {
                     post_id: postId,
                     author: parseInt(localStorage.getItem("token"))
                 })
-                    .then(() => history.push(`/posts/single/${postId}`))
             }
         }
     }
@@ -114,6 +124,7 @@ export const CommentForm = ({ setRefreshState, refreshState }) => {
                     
                     evt.preventDefault()
                     submitComment()
+                    setCommentState(true)
                     
                     
                 }}
