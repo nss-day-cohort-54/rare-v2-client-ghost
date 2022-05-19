@@ -38,7 +38,7 @@ export const NewTagForm = ({ setRefreshState }) => {
                                 }
                                 submitNewTag(newTag)
                                 updateForm({ label: "" })
-                                setRefreshState(true)
+                                .then(() => setRefreshState(true))
                             }} className="submit-button">
                                 Submit
                             </button>
