@@ -33,14 +33,15 @@ export const UserList = ({ refreshState }) => {
     return <div className="table-container">
         <table>
             <thead>
-            <tr className="singleUser">
-                <th>Username</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th className="email-row">Email</th>
-                <th>Type</th>
-                <th>Active</th>
-            </tr>
+                <tr className="singleUser">
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Type</th>
+                    <th>Active</th>
+                    <th>Admin</th>
+                </tr>
             </thead>
             {
                 sortedUsers.map(user => {

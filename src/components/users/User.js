@@ -62,7 +62,10 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
                     <td>{user.user.email}</td>
                     <td>{user.user.is_staff ? "Admin" : "User"}</td>
                     <td>
-                        <UserButtonControls user={user} id={user.id} setRefreshState={setRefreshState} isCheckbox={true} setUsers={setUsers} />
+                        <UserButtonControls user={user} id={user.id} setRefreshState={setRefreshState} isCheckbox={true} isAdminCheckbox={false} setUsers={setUsers} />
+                    </td>
+                    <td>
+                        <UserButtonControls user={user} id={user.id} setRefreshState={setRefreshState} isAdminCheckbox={true} isCheckbox={false} setUsers={setUsers} />
                     </td>
                 </tr>
             </tbody>

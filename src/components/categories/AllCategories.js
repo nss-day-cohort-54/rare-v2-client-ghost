@@ -22,7 +22,7 @@ export const AllCategories = ({ refreshState, setRefreshState }) => {
     useEffect(() => {
         getAllCategories()
             .then(data => setCategories(data))
-            .then(setRefreshState(false))
+            .then(()=>setRefreshState(true))
     },
         [refreshState])
 

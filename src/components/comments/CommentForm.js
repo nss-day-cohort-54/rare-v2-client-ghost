@@ -76,7 +76,7 @@ export const CommentForm = ({ setRefreshState, refreshState }) => {
                     post_id: postId,
                     author: parseInt(localStorage.getItem("token"))
                 })
-                    .then(() => history.go(`/posts/single/${postId}`))
+                    .then(() => history.push(`/posts/single/${postId}`))
             }
         }
     }

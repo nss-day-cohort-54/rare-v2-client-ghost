@@ -1,28 +1,21 @@
 import { getAllPosts, searchPostCategories, searchPostTitles, getPostsByTag } from "./PostManager"
 import { getUserPosts } from "./PostManager"
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Post } from "./Post";
 import { getAllUsers } from "../users/UserManager"
 import { getAllTags } from "../tags/TagManager";
 import { getAllCategories } from "../categories/CategoryManager";
+import { UserContext } from "../../UserContext";
 
 
-export const AllPosts = ( {currentUser, setRefreshState, refreshState} ) => {
-
+export const AllPosts = ({setRefreshState, refreshState}) => {
+    const {currentUser} = useContext(UserContext)
+    const [refreshPosts, setRefreshPosts] = useState(false)
     const [posts, setPosts] = useState([])
-    const [users, setUsers] = useState([])
     const [tags, setTags] = useState([])
     const [categories, setCategories] = useState([])
     const [filter, setFilterType] = useState({ type: "all", value: "" })
 
-
-    useEffect(
-        () => {
-            getAllUsers()
-                .then(setUsers)
-        },
-        []
-    )
 
     useEffect(
         () => {
@@ -40,31 +33,41 @@ export const AllPosts = ( {currentUser, setRefreshState, refreshState} ) => {
         []
     )
 
+    useEffect(() => {
+        setRefreshPosts(false)
+    }, [posts])
+
 
     useEffect(() => {
         if (filter.type === "all") {
             getAllPosts()
                 .then((posts) => {
                     setPosts(posts)
+
                 })
-        } else if (filter.type === "title") {
-            searchPostTitles(filter.value)
-                .then(setPosts)
-        } else if (filter.type === "category") {
-           searchPostCategories(filter.value)
-                .then(setPosts)
-        } 
-          // run category filter fetch with value
-          else if (filter.type === "user") {
-            getUserPosts(filter.value)
-                .then(setPosts)
-            // run user filter fetch with value
-        } else if (filter.type === "tag") {
-            getPostsByTag(filter.value)
-                .then(setPosts)
-            // run tag filter fetch with value
+            } else if (filter.type === "category") {
+                searchPostCategories(filter.value)
+                    .then((data) => setPosts(data))
+
+        // } else if (filter.type === "title") {
+        //     searchPostTitles(filter.value)
+        //         .then(setPosts)
+        //    
+        // }
+        // // run category filter fetch with value
+        // else if (filter.type === "user") {
+        //     getUserPosts(filter.value)
+        //         .then(setPosts)
+        //    
+        //     // run user filter fetch with value
+        // } else if (filter.type === "tag") {
+        //     getPostsByTag(filter.value)
+        //         .then(setPosts)
+        //    
+        //     // run tag filter fetch with value
         }
-    }, [filter])
+        
+    }, [refreshPosts])
 
     // useEffect that updates posts, [searchButton]
     return <>
@@ -97,11 +100,12 @@ export const AllPosts = ( {currentUser, setRefreshState, refreshState} ) => {
                 value={filter.type === "category" ? filter.value : "0"}
                 onChange={e => {
                     e.preventDefault()
-                    if(e.target.value != "0") {
-                        let copy = JSON.parse(JSON.stringify(filter)) 
+                    if (e.target.value != "0") {
+                        let copy = JSON.parse(JSON.stringify(filter))
                         copy.type = "category"
-                        copy.value = e.target.value
+                        copy.value = parseInt(e.target.value)
                         setFilterType(copy)
+                        setRefreshPosts(true)
                     }
                 }}
             >
@@ -117,8 +121,8 @@ export const AllPosts = ( {currentUser, setRefreshState, refreshState} ) => {
                 })}
             </select>
         </fieldset>
-        
-        
+
+
         {/* filter by user jsx
         <fieldset id="authorDropdown">
             <select
@@ -155,7 +159,7 @@ export const AllPosts = ( {currentUser, setRefreshState, refreshState} ) => {
                 value={filter.type === "tag" ? filter.value : "0"}
                 onChange={e => {
                     e.preventDefault()
-                    let copy = JSON.parse(JSON.stringify(filter)) 
+                    let copy = JSON.parse(JSON.stringify(filter))
                     copy.type = "tag"
                     copy.value = e.target.value
                     setFilterType(copy)
@@ -185,12 +189,37 @@ export const AllPosts = ( {currentUser, setRefreshState, refreshState} ) => {
             posts.length > 0
                 ? posts.map((post) => {
                     return <div key={post.id} className="posts">
-                        <Post listView={true} cardView={false} post={post} currentUser={currentUser} setRefreshState={setRefreshState} refreshState={refreshState}/>
+                        {post.approved === true ?
+                            <Post listView={true} cardView={false} post={post} currentUser={currentUser} />
+                            //does not display unapproved posts
+                            : ""}
                     </div>
                     // needs author name and category, publication date, content 
                 })
                 : "No posts"
         }
+        {/* if currentUser is staff */}
+        {currentUser.is_staff === true ?
+            
+            <>
+            
+                <h3>Posts to be approved:</h3>
+                {posts.length > 0 ?
+                    posts.map((post) => {
+                        return <div key={post.id} className="posts">
+                            {post.approved === false ?
+
+                                <Post listView={true} cardView={false} post={post} currentUser={currentUser} />
+                                //all posts approved
+                                : ""}
+                        </div>
+        })
+        //no posts at all
+        :""
+    }
+    </>
+    //current user not a staff member
+        :""}
 
 
     </>

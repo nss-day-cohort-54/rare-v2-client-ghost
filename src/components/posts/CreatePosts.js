@@ -1,17 +1,16 @@
 // imports React, useEffect, useSate, useHistory, sendPost, fetchTags
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { getAllCategories } from "../categories/CategoryManager";
 import { addTag, removeTag } from "../tags/TagManager";
 import { createPost, getSinglePost, updatePost } from "./PostManager";
+import { UserContext } from "../../UserContext";
 
 
-
-export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }) => {
-
-    const [posts, setPosts] = useState([])
+export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
+    const {currentUser} = useContext(UserContext)
     const [categories, setCategories] = useState([])
     const [originalPost, setOriginalPost] = useState({})
     const { postId } = useParams()
@@ -39,6 +38,7 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
             copy.image_url = originalPost.image_url
             copy.content = originalPost.content
             copy.approved = originalPost.approved
+            // copy.author = originalPost.author.id
             setPost(copy)
         }
 
@@ -75,7 +75,8 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
                 image_url: post.image_url,
                 content: post.content,
                 approved: post.approved,
-                user: currentUser.id
+                user: post.user,
+                tags: selectedTags
             })
                 .then(() => history.push("/posts/all"))
 
@@ -196,7 +197,7 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
                                             const tag = {}
                                             tag.tag_id=e.target.value
                                             removeTag(tag, originalPost.id)
-                                            setRefreshState(true)
+                                            .then(() => setRefreshState(true))
 
                                         }}/>
                                         <label htmlFor={tag.label}>{tag.label}</label>
@@ -206,7 +207,7 @@ export const CreatePosts = ({ currentUser, tags, setRefreshState, refreshState }
                                             const tag = {}
                                             tag.tag_id=e.target.value
                                             addTag(tag, originalPost.id)
-                                            setRefreshState(true)
+                                            .then(() => setRefreshState(true))
 
                                         }}/>
                                     
