@@ -6,7 +6,7 @@ import { deleteTag, sendTagEdit } from "../tags/TagManager"
 import { useEffect, useState } from "react"
 import { deleteCategory, editCategory } from "../categories/CategoryManager"
 
-export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, setRefreshState, tag, isCategories, category, isComment }) => {
+export const ButtonControls = ({ isPost, id, postId, commentId, getComments, isTags, setRefreshState, tag, isCategories, category, isComment }) => {
   const history = useHistory()
   const [singleTag, setSingleTag] = useState()
   useEffect(() => {
@@ -118,7 +118,7 @@ export const ButtonControls = ({ isPost, id, commentId, getComments, isTags, set
             .then(()=>setRefreshState(true))
         }
       } else if (isComment) {
-        window.alert("Cannot edit comments")
+        history.push(`/posts/single/${postId}/createComment/${id}`)
       }
     }}>
       <img className="editIcon" src={`${Settings.EditIcon}`} width="25px" height="25px" />

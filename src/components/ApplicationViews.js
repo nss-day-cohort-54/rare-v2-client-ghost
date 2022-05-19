@@ -13,6 +13,7 @@ import { PostsByUser } from "./posts/PostsByUser.js"
 import { SinglePost } from "./posts/SinglePost.js"
 import { getCurrentUser } from "./users/UserManager";
 import { NewTagForm } from "./tags/CreateTagForm.js"
+import { CommentForm } from "./comments/CommentForm.js"
 
 export const ApplicationViews = () => {
   //state to refresh state when new object is submitted
@@ -64,6 +65,12 @@ export const ApplicationViews = () => {
       </Route>
       <Route exact path="/posts/user/:userId(\d+)">
         <PostsByUser />
+      </Route>
+      <Route exact path="/posts/single/:postId(\d+)/createComment">
+        <CommentForm />
+      </Route>
+      <Route exact path="/posts/single/:postId(\d+)/createComment/:commentId(\d+)">
+        <CommentForm />
       </Route>
       {/* 
       <Route exact path="/posts/create">

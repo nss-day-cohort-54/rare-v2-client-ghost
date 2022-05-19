@@ -43,3 +43,12 @@ export const editComment = (comment) => {
         body: JSON.stringify(comment)
     })
 }
+
+// Get single comment
+export const getSingleComment = (commentId) => {
+    return fetch(`${Settings.API}/comments/${commentId}`, {
+        headers: {
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }
+    }).then(response => response.json())
+}
