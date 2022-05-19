@@ -81,17 +81,17 @@ export const searchPostCategories = (categoryId) => {
   })
     .then(res => res.json())
 };
-
-
-
-export const getPostsByTag = (id) => {
-  return fetchIt(`${Settings.API}/posts?tag_id=${id}`)
+// get posts by category
+export const searchPostTags = (tag) => {
+  return fetch(`${Settings.API}/posts?tag=${tag}`, {
+    headers: {
+      "Authorization": `Token ${localStorage.getItem("token")}`
+    }
+  })
+    .then(res => res.json())
 };
-// get posts by categoryId
-// export const getPostsByCategoryId = (categoryId) => {
-//   return fetch(`http://localhost:8088/posts?categoryId=${categoryId}`)
-//   .then(response => response.json())
-// }
+
+
 
 // create post
 export const createPost = (post) => {
@@ -106,6 +106,10 @@ export const createPost = (post) => {
 };
 
 export const searchPostTitles = titleString => {
-  return fetch(`http://localhost:8088/posts?title=${titleString}`)
+  return fetch(`${Settings.API}/posts?title=${titleString}`, {
+    headers: {
+      "Authorization": `Token ${localStorage.getItem("token")}`
+    }
+  })
     .then(res => res.json())
 };

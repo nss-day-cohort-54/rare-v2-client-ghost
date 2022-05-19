@@ -1,4 +1,4 @@
-import { getAllPosts, searchPostCategories, searchPostTitles, getPostsByTag } from "./PostManager"
+import { getAllPosts, searchPostCategories, searchPostTitles, getPostsByTag, searchPostTags } from "./PostManager"
 import { getUserPosts } from "./PostManager"
 import React, { useEffect, useState, useContext } from "react";
 import { Post } from "./Post";
@@ -8,8 +8,8 @@ import { getAllCategories } from "../categories/CategoryManager";
 import { UserContext } from "../../UserContext";
 
 
-export const AllPosts = ({setRefreshState, refreshState}) => {
-    const {currentUser} = useContext(UserContext)
+export const AllPosts = ({ setRefreshState, refreshState }) => {
+    const { currentUser } = useContext(UserContext)
     const [refreshPosts, setRefreshPosts] = useState(false)
     const [posts, setPosts] = useState([])
     const [tags, setTags] = useState([])
@@ -45,28 +45,19 @@ export const AllPosts = ({setRefreshState, refreshState}) => {
                     setPosts(posts)
 
                 })
-            } else if (filter.type === "category") {
-                searchPostCategories(filter.value)
-                    .then((data) => setPosts(data))
-
-        // } else if (filter.type === "title") {
-        //     searchPostTitles(filter.value)
-        //         .then(setPosts)
-        //    
-        // }
-        // // run category filter fetch with value
-        // else if (filter.type === "user") {
-        //     getUserPosts(filter.value)
-        //         .then(setPosts)
-        //    
-        //     // run user filter fetch with value
-        // } else if (filter.type === "tag") {
-        //     getPostsByTag(filter.value)
-        //         .then(setPosts)
-        //    
-        //     // run tag filter fetch with value
-        }
+        } else if (filter.type === "category") {
+            searchPostCategories(filter.value)
+                .then((data) => setPosts(data))
         
+            } else if (filter.type === "tag") {
+            searchPostTags(filter.value)
+                .then((data) => setPosts(data))
+
+        } else if (filter.type === "title") {
+            searchPostTitles(filter.value)
+                .then((data) => setPosts(data))
+        }
+
     }, [refreshPosts])
 
     // useEffect that updates posts, [searchButton]
@@ -86,6 +77,7 @@ export const AllPosts = ({setRefreshState, refreshState}) => {
                         value: e.currentTarget.previousElementSibling.value
                     }
                     setFilterType(filterToSet)
+                    setRefreshPosts(true)
                 }}>
                     <label htmlFor="searchButton">Search</label>
                 </button>
@@ -163,6 +155,7 @@ export const AllPosts = ({setRefreshState, refreshState}) => {
                     copy.type = "tag"
                     copy.value = e.target.value
                     setFilterType(copy)
+                    setRefreshPosts(true)
                 }}
             >
                 <option name="tagId" hidden value="0">
@@ -200,9 +193,9 @@ export const AllPosts = ({setRefreshState, refreshState}) => {
         }
         {/* if currentUser is staff */}
         {currentUser.is_staff === true ?
-            
+
             <>
-            
+
                 <h3>Posts to be approved:</h3>
                 {posts.length > 0 ?
                     posts.map((post) => {
@@ -213,13 +206,13 @@ export const AllPosts = ({setRefreshState, refreshState}) => {
                                 //all posts approved
                                 : ""}
                         </div>
-        })
-        //no posts at all
-        :""
-    }
-    </>
-    //current user not a staff member
-        :""}
+                    })
+                    //no posts at all
+                    : ""
+                }
+            </>
+            //current user not a staff member
+            : ""}
 
 
     </>
