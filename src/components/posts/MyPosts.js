@@ -12,7 +12,7 @@ export const MyPosts = ( { refreshState, setRefreshState }) => {
     useEffect(() => {
         getUserPosts(currentUser?.id)
             .then((data) => setPosts(data))
-            .then(() => setRefreshState(false))
+            .then(() => setRefreshState(true))
     }, [currentUser, refreshState])
 
 

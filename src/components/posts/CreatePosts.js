@@ -11,8 +11,6 @@ import { UserContext } from "../../UserContext";
 
 export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
     const {currentUser} = useContext(UserContext)
-
-    const [posts, setPosts] = useState([])
     const [categories, setCategories] = useState([])
     const [originalPost, setOriginalPost] = useState({})
     const { postId } = useParams()

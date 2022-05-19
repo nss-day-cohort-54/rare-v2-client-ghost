@@ -131,7 +131,7 @@ export const Post = ({ listView, cardView, post }) => {
                                 copy.category = post.category.id
                                 copy.tags = post.tags.map(tag => tag.id)
                                 updatePost(copy)
-                                history.push('/posts/all')
+                                .then(() => history.push('/posts/all'))
                             }}>Approve Post?</button>
                             :""}
                         </div>

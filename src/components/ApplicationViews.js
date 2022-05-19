@@ -26,7 +26,7 @@ export const ApplicationViews = ({refreshState, setRefreshState}) => {
   useEffect(() => {
     getAllTags()
       .then(data => setTags(data))
-      .then(setRefreshState(false))
+      .then(setRefreshState(true))
   },
     [refreshState])
 
