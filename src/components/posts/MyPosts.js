@@ -13,7 +13,7 @@ export const MyPosts = ( { refreshState, setRefreshState }) => {
         getUserPosts(currentUser?.id)
             .then((data) => setPosts(data))
             .then(() => setRefreshState(true))
-    }, [currentUser, refreshState])
+    }, [currentUser])
 
 
     return <>

@@ -6,16 +6,23 @@ import { changeActive, getAllUsers } from "./UserManager"
 
 
 
-export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setUsers }) => {
+export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setUsers, isAdminCheckbox }) => {
     const history = useHistory()
     const [checkActive, setActive] = useState(false)
+    let tag = ""
+    if (isCheckbox) {
+        tag = "anything-"
+    } else {
+        tag = "admin-"
+    } 
 
     return <div>
-        <dialog id={`anything-${id}`}>
-
+        <dialog id={`${tag}${id}`}>
             {
-                user.user.is_active ? <div>Are you sure you want to disable this user?</div>
-                    : <div>Would you like to reinstate user?</div>
+                isCheckbox && user.user.is_active ? <div>Are you sure you want to disable this user?</div>
+                    : isCheckbox ? <div>Would you like to reinstate user?</div>
+                        : isAdminCheckbox && user.user.is_staff ? <div>Do you wish to disable admin?</div>
+                            : <div>Would you like to reinstate user as admin?</div>
             }
 
             <div>
@@ -32,8 +39,21 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
                                     is_active: !status
                                 }
                                 changeActive(userObject)
-                                .then(getAllUsers)
-                                .then(data=>setUsers(data))
+                                    .then(getAllUsers)
+                                    .then(data => setUsers(data))
+                                const buttonTarget = document.querySelector(`#anything-${id}`)
+                                buttonTarget.close()
+                            } else if (isAdminCheckbox) {
+                                const status = user.user.is_staff
+                                const userObject = {
+                                    id: user.user.id,
+                                    is_staff: !status,
+                                    username: user.user.username,
+                                    is_active: user.user.is_active
+                                }
+                                changeActive(userObject)
+                                    .then(getAllUsers)
+                                    .then(data => setUsers(data))
                                 const buttonTarget = document.querySelector(`#anything-${id}`)
                                 buttonTarget.close()
                             }
@@ -53,14 +73,28 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
             </div>
 
         </dialog>
-
-        <input type="checkbox" id="is_active"
-            name="is_active" checked={!user.user.is_active} value={user.user.is_active}
-            onChange={() => {
-                const buttonTarget = document.querySelector(`#anything-${id}`)
-                buttonTarget.showModal()
-            }} />
-            <label>Deactivate</label>
+        {
+            isAdminCheckbox ?
+            <div>
+                <input type="checkbox" id="is_staff"
+                    name="is_staff" checked={user.user.is_staff} value={user.user.is_staff}
+                    onChange={() => {
+                        const buttonTarget = document.querySelector(`#anything-${id}`)
+                        buttonTarget.showModal()
+                    }} />
+                <label>Admin</label></div>
+            : isCheckbox ?
+            <div>
+                    <input type="checkbox" id="is_active"
+                        name="is_active" checked={!user.user.is_active} value={user.user.is_active}
+                        onChange={() => {
+                            const buttonTarget = document.querySelector(`#anything-${id}`)
+                            buttonTarget.showModal()
+                        }} />
+                    <label>Deactivate</label> </div>
+                        
+                    : ""
+        }
     </div >
 }
 
