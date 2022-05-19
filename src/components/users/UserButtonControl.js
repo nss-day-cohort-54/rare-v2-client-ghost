@@ -24,11 +24,12 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
                         (e) => {
                             e.preventDefault()
                             if (isCheckbox) {
+                                const status = user.user.is_active
                                 const userObject = {
                                     id: user.user.id,
                                     is_staff: user.user.is_staff,
                                     username: user.user.username,
-                                    is_active: checkActive
+                                    is_active: !status
                                 }
                                 changeActive(userObject)
                                 .then(getAllUsers)
@@ -56,8 +57,6 @@ export const UserButtonControls = ({ id, setRefreshState, isCheckbox, user, setU
         <input type="checkbox" id="is_active"
             name="is_active" checked={!user.user.is_active} value={user.user.is_active}
             onChange={() => {
-                const isActive = user.user.is_active
-                setActive(!isActive)
                 const buttonTarget = document.querySelector(`#anything-${id}`)
                 buttonTarget.showModal()
             }} />
