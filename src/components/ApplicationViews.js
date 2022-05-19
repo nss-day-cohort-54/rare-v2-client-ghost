@@ -13,23 +13,21 @@ import { PostsByUser } from "./posts/PostsByUser.js"
 import { SinglePost } from "./posts/SinglePost.js"
 import { getCurrentUser } from "./users/UserManager";
 import { NewTagForm } from "./tags/CreateTagForm.js"
+import { UserContext } from "../UserContext.js"
 
-export const ApplicationViews = () => {
-  //state to refresh state when new object is submitted
-  const [refreshState, setRefreshState] = useState(false)
-  const [currentUser, setUser] = useState()
+export const ApplicationViews = ({refreshState, setRefreshState}) => {
+
   const [tags, setTags] = useState([])
 
 
 
-    // use UseEffect to getAllTags and set the state of the tag array.
-    useEffect(() => {
-        getAllTags()
-        .then(data => setTags(data))
-        .then(getCurrentUser()
-          .then(data => setUser(data)))
-        .then(setRefreshState(false))
-    },
+
+  // use UseEffect to getAllTags and set the state of the tag array.
+  useEffect(() => {
+    getAllTags()
+      .then(data => setTags(data))
+      .then(setRefreshState(true))
+  },
     [refreshState])
 
 
@@ -39,7 +37,7 @@ export const ApplicationViews = () => {
         <Home />
       </Route>
       <Route exact path="/posts/all">
-        <AllPosts currentUser={currentUser} refreshState={refreshState} setRefreshState={setRefreshState} />
+        <AllPosts refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/users">
         <UserList refreshState={refreshState}/>
@@ -48,19 +46,19 @@ export const ApplicationViews = () => {
         <User listView={false} refreshState={refreshState} setRefreshState={setRefreshState}/>
       </Route>
       <Route path="/tags">
-        <AllTags currentUser={currentUser} tags={tags} refreshState={refreshState} setRefreshState={setRefreshState} />
+        <AllTags tags={tags} refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/newPost">
-        <CreatePosts tags={tags} currentUser={currentUser} editing={false} />
+        <CreatePosts tags={tags} editing={false} />
       </Route>
       <Route exact path="/editPost/:postId(\d+)">
-        <CreatePosts setRefreshState={setRefreshState} refreshState={refreshState} tags={tags} currentUser={currentUser} editing={true} />
+        <CreatePosts setRefreshState={setRefreshState} refreshState={refreshState} tags={tags} editing={true} />
       </Route>
       <Route exact path="/posts/single/:postId(\d+)">
         <SinglePost refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/posts/myPosts">
-        <MyPosts currentUser={currentUser} refreshState={refreshState} setRefreshState={setRefreshState} />
+        <MyPosts refreshState={refreshState} setRefreshState={setRefreshState} />
       </Route>
       <Route exact path="/posts/user/:userId(\d+)">
         <PostsByUser />

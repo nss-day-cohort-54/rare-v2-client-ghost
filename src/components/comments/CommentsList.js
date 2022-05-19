@@ -59,7 +59,7 @@ export const CommentList = ({setRefreshState, refreshState}) => {
         getCommentsByPostId(postId)
             .then(setComments)
             .then(() => {
-                setRefreshState(false)
+                setRefreshState(true)
             })
     }
 
