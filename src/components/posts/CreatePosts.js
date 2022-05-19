@@ -40,7 +40,7 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
             copy.image_url = originalPost.image_url
             copy.content = originalPost.content
             copy.approved = originalPost.approved
-            // copy.user = originalPost.author.id
+            // copy.author = originalPost.author.id
             setPost(copy)
         }
 

@@ -40,26 +40,26 @@ export const AllPosts = ({setRefreshState, refreshState}) => {
                 .then((posts) => {
                     setPosts(posts)
                 })
-                .then(() => setRefreshState(false))
+                .then(() => setRefreshState(true))
         } else if (filter.type === "title") {
             searchPostTitles(filter.value)
                 .then(setPosts)
-                .then(() => setRefreshState(false))
+                .then(() => setRefreshState(true))
         } else if (filter.type === "category") {
             searchPostCategories(filter.value)
                 .then(setPosts)
-                .then(() => setRefreshState(false))
+                .then(() => setRefreshState(true))
         }
         // run category filter fetch with value
         else if (filter.type === "user") {
             getUserPosts(filter.value)
                 .then(setPosts)
-                .then(() => setRefreshState(false))
+                .then(() => setRefreshState(true))
             // run user filter fetch with value
         } else if (filter.type === "tag") {
             getPostsByTag(filter.value)
                 .then(setPosts)
-                .then(() => setRefreshState(false))
+                .then(() => setRefreshState(true))
             // run tag filter fetch with value
         }
         
