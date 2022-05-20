@@ -97,7 +97,12 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
                     <tr>
                         
                             {currentUser.id === viewUser.user.id? 
-                            <td>Picture: <img src={`http://localhost:8088${viewUser.profileImageUrl?.photo || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} />
+                                
+                            <td>Picture: 
+                                {viewUser.profileImageUrl.photo === null ?
+                                <img src={"https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"} width={300} height={300} />
+                                : 
+                                <img src={`http://localhost:8088${viewUser.profileImageUrl.photo}`} width={300} height={300} />}
 
                             {changePic === false ?
                             <button onClick={()=>setChangePic(true)}>Upload New Picture?</button>
