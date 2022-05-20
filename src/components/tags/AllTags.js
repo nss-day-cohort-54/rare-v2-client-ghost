@@ -4,7 +4,7 @@ import { NewTagForm } from "./CreateTagForm";
 import { getCurrentUser } from "../users/UserManager";
 import { ButtonControls } from "../buttonControls/ButtonControls";
 import { UserContext } from "../../UserContext";
-
+import "../categories/AllCategories.css"
 
 
 
@@ -15,7 +15,7 @@ export const AllTags = ({refreshState, setRefreshState, tags}) => {
         <div>All Tags</div>
         {tags.map((tag) => {
             
-            return <div key={`tag--${tag.id}`}>{tag.label} 
+            return <div key={`tag--${tag.id}`} className="list-container">
                     {
                         currentUser.is_staff
                         ? <div className="cardButtons">
@@ -27,6 +27,7 @@ export const AllTags = ({refreshState, setRefreshState, tags}) => {
                             </div>
                         : null
                     }
+                    <h3> {tag.label} </h3>
                 </div>
         })}
         <div className="CreateNewTagFormContainer">
