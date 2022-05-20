@@ -1,14 +1,15 @@
 import { getAllTags } from "./TagManager"
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NewTagForm } from "./CreateTagForm";
 import { getCurrentUser } from "../users/UserManager";
 import { ButtonControls } from "../buttonControls/ButtonControls";
+import { UserContext } from "../../UserContext";
 
 
 
 
-export const AllTags = ({refreshState, setRefreshState, tags, currentUser}) => {
-    
+export const AllTags = ({refreshState, setRefreshState, tags}) => {
+    const { currentUser } = useContext(UserContext)
 
     return <>
         <div>All Tags</div>
