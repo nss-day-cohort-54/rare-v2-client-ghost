@@ -101,7 +101,9 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
 
                             {changePic === false ?
                             <button onClick={()=>setChangePic(true)}>Upload New Picture?</button>
-                            :<><input type="file" id="author_image" onChange={createImageString} />
+                            : //if upload new pic has been clicked
+                            
+                            <><input type="file" id="author_image" onChange={createImageString} />
                             <button onClick={() => {
                                 const photoObject = {}
                                 photoObject.author_image = base64ImageState
@@ -112,7 +114,9 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
                             
                             </>}
                             </td>
-                            :<td>Picture: <img src={`${viewUser.profileImageUrl.photo || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} /></td>
+                            : //if not currentUser
+                            
+                            <td>Picture: <img src={`${viewUser.profileImageUrl.photo || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} /></td>
                             }
                         <td>Name: {viewUser.user.first_name} {viewUser.user.last_name}</td>
                         <td>Username: {viewUser.user.username}</td>
