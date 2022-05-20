@@ -1,0 +1,12 @@
+.list-container {
+    display: flex;
+    align-items: center;
+}
+
+h3 {
+    font-size: x-large;
+}
+
+.list-container:nth-child(odd) {
+    background-color: rgb(236, 244, 237);
+}

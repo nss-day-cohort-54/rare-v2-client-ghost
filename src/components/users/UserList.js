@@ -45,7 +45,7 @@ export const UserList = ({ refreshState }) => {
             </thead>
             {
                 sortedUsers.map(user => {
-                    return <div key={`user-${user.id}`}>
+                    return <div key={`user-${user.id}`} className="list-container">
                         <User user={user} listView={true} setUsers={setUsers} isCheckbox={true} />
                     </div>
                 })

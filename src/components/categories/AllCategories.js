@@ -4,7 +4,7 @@ import { NewCategoryForm } from "./CreateCategoryForm";
 import { getCurrentUser } from "../users/UserManager";
 import { ButtonControls } from "../buttonControls/ButtonControls";
 import { UserContext } from "../../UserContext";
-
+import "./AllCategories.css"
 
 // declare and export function AllCategories which get all category objects
 
@@ -35,8 +35,9 @@ export const AllCategories = ({ }) => {
     return <>
         <div>All Categories</div>
         {categories.map((category) => {
-            return <div key={`category--${category.id}`}>{category.label}
+            return <div key={`category--${category.id}`} className="list-container">
                 {currentUser.is_staff ? <ButtonControls isCategories={true} id={category.id} setRefreshState={setRefreshState} category={category}/> : ""}
+                <h3>{category.label}</h3>
                     
             </div>
         })}

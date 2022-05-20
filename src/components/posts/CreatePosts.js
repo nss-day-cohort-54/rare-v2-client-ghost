@@ -7,10 +7,10 @@ import { getAllCategories } from "../categories/CategoryManager";
 import { addTag, removeTag } from "../tags/TagManager";
 import { createPost, getSinglePost, updatePost } from "./PostManager";
 import { UserContext } from "../../UserContext";
-
+import "./CreatePosts.css"
 
 export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
-    const {currentUser} = useContext(UserContext)
+    const { currentUser } = useContext(UserContext)
     const [categories, setCategories] = useState([])
     const [originalPost, setOriginalPost] = useState({})
     const { postId } = useParams()
@@ -20,10 +20,10 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
     const [post, setPost] = useState({
         title: "",
         publication_date: Date.now(),
-        category:1,
+        category: 1,
         image_url: "",
         content: ""
-        
+
     })
 
     const [selectedTags, setSelectedTags] = useState([])
@@ -92,9 +92,9 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
                     user: currentUser.id,
                     approved: true,
                     tags: selectedTags
-                    
+
                 })
-                .then(() => history.push("/posts/myposts"))
+                    .then(() => history.push("/posts/myposts"))
             } else {
                 createPost({
                     title: post.title,
@@ -105,10 +105,12 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
                     user: currentUser.id,
                     approved: false,
                     tags: selectedTags
-                    
+
                 })
-                .then(() => history.push("/posts/myposts"))
-    }}}
+                    .then(() => history.push("/posts/myposts"))
+            }
+        }
+    }
 
     return (
         <form className="postForm">
@@ -187,48 +189,50 @@ export const CreatePosts = ({ tags, setRefreshState, refreshState }) => {
                                 }
                             </>
 
-                        }) : 
+                        }) :
                         tags.map(tag => {
                             return <>
                                 {(originalPost.tags?.some(t => t.id === tag.id) ?
                                     <>
-                                        <input type="checkbox" key={`tag--${tag.id}`} checked={true} name={tag.label} value={tag.id} 
-                                        onClick={(e) => {
-                                            const tag = {}
-                                            tag.tag_id=e.target.value
-                                            removeTag(tag, originalPost.id)
-                                            .then(() => setRefreshState(true))
+                                        <input type="checkbox" key={`tag--${tag.id}`} checked={true} name={tag.label} value={tag.id}
+                                            onClick={(e) => {
+                                                const tag = {}
+                                                tag.tag_id = e.target.value
+                                                removeTag(tag, originalPost.id)
+                                                    .then(() => setRefreshState(true))
 
-                                        }}/>
+                                            }} />
                                         <label htmlFor={tag.label}>{tag.label}</label>
                                     </>
                                     : <>
-                                    <input type="checkbox" key={`tag--${tag.id}`} name={tag.label} value={tag.id} onClick={(e) => {
+                                        <input type="checkbox" key={`tag--${tag.id}`} name={tag.label} value={tag.id} onClick={(e) => {
                                             const tag = {}
-                                            tag.tag_id=e.target.value
+                                            tag.tag_id = e.target.value
                                             addTag(tag, originalPost.id)
-                                            .then(() => setRefreshState(true))
+                                                .then(() => setRefreshState(true))
 
-                                        }}/>
-                                    
-                                    <label htmlFor={tag.label}>{tag.label}
-                                    </label>
+                                        }} />
+
+                                        <label htmlFor={tag.label}>{tag.label}
+                                        </label>
                                     </>
-                        )}
+                                )}
                             </>
                         }
                         )
                     }
                 </div>
             </fieldset>
-            <button type="submit"
-                onClick={evt => {
-                    evt.preventDefault()
-                    createNewPost()
-                }}
-                className="bt btn-primary">
-                {editMode ? "Save Changes" : "Create Post"}
-            </button>
+            <div>
+                <button type="submit"
+                    onClick={evt => {
+                        evt.preventDefault()
+                        createNewPost()
+                    }}
+                    className="bt btn-primary">
+                    {editMode ? "Save Changes" : "Create Post"}
+                </button>
+            </div>
             <Link to="/posts/all" className="cancel-btn">Cancel</Link>
         </form>
     )
