@@ -5,13 +5,14 @@
 // delete sub relationship
 
 import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import "./User.css"
-import { changeActive, getAllUsers, getSingleUser } from "./UserManager"
+import { changeActive, createPhoto, getAllUsers, getSingleUser } from "./UserManager"
 import { Link } from "react-router-dom"
 import { SubForm } from "./SubForm"
 import { getUserPosts } from "../posts/PostManager"
 import { UserButtonControls } from "./UserButtonControl"
+import { UserContext } from "../../UserContext"
 
 // function that generates JSX for individual user element
 export const User = ({ listView, user, refreshState, setUsers, setRefreshState }) => {
@@ -21,7 +22,10 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
     const [userPosts, setUserPosts] = useState([])
     const [postCount, setPostCount] = useState(0)
     const { userId } = useParams()
-
+    const {currentUser} = useContext(UserContext)
+    const [base64ImageState, setBase64ImageState] = useState()
+    const [changePic, setChangePic] = useState(false)
+    const [refreshProfile, setRefreshProfile] = useState(false)
 
     useEffect(
         () => {
@@ -29,8 +33,13 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
                 getSingleUser(userId)
                     .then(userData => setViewUser(userData))
             }
-        }, [userId, listView]
+        }, [userId, listView, refreshProfile]
     )
+
+    useEffect(() => {
+        if (refreshProfile === true)
+        setRefreshProfile(false)
+    }, [refreshProfile])
 
     useEffect(
         () => {
@@ -42,6 +51,20 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
             }
         }, [viewUser]
     )
+    const getBase64 = (file, callback) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(file);
+    }
+
+    const createImageString = (event) => {
+        getBase64(event.target.files[0], (base64ImageString) => {
+            console.log("Base64 of file is", base64ImageString);
+            setBase64ImageState(base64ImageString)
+    
+            // Update a component state variable to the value of base64ImageString
+        });
+    }
 
     // does subscribe button need an onclick?
     // yes
@@ -72,7 +95,25 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
             : viewUser
                 ? <tbody> 
                     <tr>
-                        <td>Picture: <img src={`${viewUser.user.profileImageUrl || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} /></td>
+                        
+                            {currentUser.id === viewUser.user.id? 
+                            <td>Picture: <img src={`http://localhost:8088${viewUser.profileImageUrl?.photo || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} />
+
+                            {changePic === false ?
+                            <button onClick={()=>setChangePic(true)}>Upload New Picture?</button>
+                            :<><input type="file" id="author_image" onChange={createImageString} />
+                            <button onClick={() => {
+                                const photoObject = {}
+                                photoObject.author_image = base64ImageState
+                                photoObject.author_id = currentUser.id
+                                createPhoto(photoObject).then(() => setBase64ImageState(undefined)).then(() => setRefreshProfile(true))
+
+                            }}>Upload</button>
+                            
+                            </>}
+                            </td>
+                            :<td>Picture: <img src={`${viewUser.profileImageUrl.photo || "https://www.themoviedb.org/t/p/w235_and_h235_face/j2De8KaACIbi4IX8WfUZGmCW1k2.jpg"}`} width={300} height={300} /></td>
+                            }
                         <td>Name: {viewUser.user.first_name} {viewUser.user.last_name}</td>
                         <td>Username: {viewUser.user.username}</td>
                         <td className="email-row" >Email: {viewUser.user.email}</td>
