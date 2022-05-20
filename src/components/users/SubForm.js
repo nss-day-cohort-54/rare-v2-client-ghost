@@ -1,61 +1,62 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { UserContext } from "../../UserContext"
 import { addSub, deleteSub, getSubsForFollower } from "./SubManager"
+import { getCurrentUser } from "./UserManager"
 
 
-export const SubForm = ({ author }) => {
+export const SubForm = ({ author, setRefreshState, refreshState }) => {
     const [subbed, setSubbed] = useState(false)
     const [subs, setSubs] = useState([])
     const [currentSub, setCurrentSub] = useState({})
-    const [currentUser, setCurrentUser] = useState(0)
+    const { currentUser } = useContext(UserContext)
+    const [subRefresh, setSubRefresh] = useState(false)
 
+
+
+    const getSubs = () => {
+        getSubsForFollower(currentUser.id)
+            .then(subData => setSubs(subData))
+    }
 
     useEffect(
         () => {
-            let userId = localStorage.getItem("token")
-            setCurrentUser(userId)
-        },
-        []
-    )
-
-    useEffect(
-        () => {
-            if (currentUser > 0) {
-                getSubsForFollower(currentUser)
+            if (currentUser && currentUser.id) {
+                getSubsForFollower(currentUser.id)
                     .then(subData => setSubs(subData))
             }
         }, [currentUser]
     )
 
     useEffect(() => {
-        if (subs && subs.length > 0) {
-            let isSubbed = false
-            for (const sub of subs) {
-                if (sub.authorId === author.id) {
-                    isSubbed = true
-                    setCurrentSub(sub)
-                }
+        let isSubbed = false
+        for (const sub of subs) {
+            if (sub.author === author.id) {
+                isSubbed = true
+                setCurrentSub(sub)
             }
-            setSubbed(isSubbed)
         }
+        setSubbed(isSubbed)
+
     }, [subs])
 
     const handleSub = (e) => {
         if (subbed) {
             deleteSub(currentSub.id)
-                .then(setSubbed(false))
+                .then(returnedSub => {
+                    setCurrentSub(returnedSub)
+                }).then(getSubs)
+
         } else {
-            let userId = parseInt(currentUser)
+            let userId = parseInt(currentUser.id)
             if (userId != author.id) {
                 let new_subscription = {
-                    followerId: parseInt(currentUser),
-                    authorId: author.id,
-                    createdOn: (new Date()).toISOString().split('T')[0]
+                    author: author.id,
                 }
                 addSub(new_subscription)
                     .then(returnedSub => {
                         setCurrentSub(returnedSub)
                     })
-                    .then(setSubbed(true))
+                    .then(getSubs)
             } else {
                 window.alert("You can't subscribe to yourself.")
             }
@@ -69,6 +70,7 @@ export const SubForm = ({ author }) => {
                     className="subButton"
                     onClick={(e) => {
                         handleSub(e)
+
                     }}>
                     {subbed ? "Unsubscribe" : "Subscribe"}
                 </button>

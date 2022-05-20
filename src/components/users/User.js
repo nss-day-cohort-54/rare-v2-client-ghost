@@ -84,7 +84,7 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
                             </Link>
                         </td>
                         <td>
-                            <SubForm author={viewUser} />
+                            <SubForm author={viewUser} setRefreshState={setRefreshState} refreshState={refreshState}/>
                         </td>
                     </tr>
                 </tbody>
