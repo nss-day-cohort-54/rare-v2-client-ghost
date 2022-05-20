@@ -46,3 +46,15 @@ export const changeActive = (user) => {
         body: JSON.stringify(user)
     })
 }
+
+export const createPhoto = (photo) => {
+    return fetch(`${Settings.API}/photos`, {
+        method: `POST`, 
+        headers:{
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify(photo)
+    })
+        .then(response => response.json())
+}
