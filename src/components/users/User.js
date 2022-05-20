@@ -130,7 +130,7 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
                         <td>Profile Type: {viewUser.user.is_staff ? "Admin" : "Author"}</td>
                         <td>
                             <Link to={`/posts/user/${viewUser.user.id}`}>
-                                See Articles - Count: {postCount}
+                                See Articles - Count: {viewUser.post_count}
                             </Link>
                         </td>
                         <td>
