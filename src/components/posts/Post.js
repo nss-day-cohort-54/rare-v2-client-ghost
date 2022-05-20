@@ -82,7 +82,6 @@ export const Post = ({ listView, cardView, post, refreshState, setRefreshState }
                                         currentUser?.id === post.author.id
                                             ? <>
                                             <ButtonControls isPost={true} id={post.id} />
-                                            <button>Manage Tags</button>
                                             </>
                                             : null
                                     }

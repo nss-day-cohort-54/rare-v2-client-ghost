@@ -39,7 +39,7 @@ export const NewCategoryForm = ({ setRefreshState }) => {
                                     label: form.label
                                 }
                                 submitNewCategory(newCategory)
-                                updateForm({ label: "" })
+                                .then(updateForm({ label: "" }))
                                 .then(() => setRefreshState(true))
                             }} className="submit-button">
                                 Submit
