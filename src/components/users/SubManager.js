@@ -3,14 +3,36 @@ import { Settings } from "../utils/Settings"
 
 // get all subs by user id
 export const getSubsForFollower = (followerId) => {
-    return fetchIt(`${Settings.API}/subscriptions?follower=${followerId}`)
+    return fetch(`${Settings.API}/subscriptions?follower=${followerId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }
+    })
+        .then(res => res.json())
+
 }
 
 // post new sub relationship
 export const addSub = (new_sub) => {
-    return fetchIt(`${Settings.API}/subscriptions`, "POST", JSON.stringify(new_sub))
+    return fetch(`${Settings.API}/subscriptions`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }, body: JSON.stringify(new_sub)
+    })
+        .then(res => res.json())
+
 }
 // delete sub relationship
 export const deleteSub = (subId) => {
-    return fetchIt(`${Settings.API}/subscriptions/${subId}`, "DELETE")
+    return fetch(`${Settings.API}/subscriptions/${subId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Token ${localStorage.getItem("token")}`
+        }
+    })
 }
