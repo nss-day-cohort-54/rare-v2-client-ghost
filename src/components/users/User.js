@@ -34,10 +34,8 @@ export const User = ({ listView, user, refreshState, setUsers, setRefreshState }
 
     useEffect(
         () => {
-            if (viewUser) {
-                getUserPosts(userId)
-                    .then(data => setUserPosts(data))
-                let count = userPosts.length
+            if(viewUser) {
+                let count = viewUser.user?.posts?.length
                 setPostCount(count)
             }
         }, [viewUser]
